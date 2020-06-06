@@ -1,17 +1,17 @@
 # Site settings
-title: My Blog
-SEOTitle: 我的博客 | My Blog
-header-img: img/post-bg-desk.jpg
+title: My Blog                              # 你博客的标题
+SEOTitle: 我的博客 | My Blog                # 显示在浏览器上搜索的时候显示的标题      
+header-img: img/post-bg-desk.jpg            # 显示在首页的背景图片
 email: leyuanno.1@outlook.com
-description: "写一句你想写的话"
-keyword: "我的博客"
+description: "写一句你想写的话"             # 说实话我还没发现这是用在哪的。。。
+keyword: "我的博客"                         # 貌似也没什么用
 url: "http://leyuanheart.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
 github_repo: "https://github.com/leyuanheart/leyuanheart.github.io.git" # you code repository
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "苟利国家生死以，岂因祸福避趋之~"
+sidebar-about-description: "尽人事，听天命~"
 sidebar-avatar: /img/avatar_binggan.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
@@ -62,8 +62,8 @@ gitalk:
   enable: true    #是否开启Gitalk评论
   clientID:                             #生成的clientID
   clientSecret:     #生成的clientSecret
-  repo: name.github.io    #仓库名称
-  owner:     #github用户名
+  repo: leyuanheart.github.io    #仓库名称
+  owner: leyuanheart    #github用户名
   admin: 
   distractionFreeMode: true #是否启用类似FB的阴影遮罩
 
@@ -83,7 +83,7 @@ ga_domain:                # 默认的是 auto, 这里我是自定义了的域名
 
 # Featured Tags
 featured-tags: true                     # 是否使用首页标签
-featured-condition-size: 1              # 相同标签数量大于这个数，才会出现在首页
+featured-condition-size: 0              # 相同标签数量大于这个数，才会出现在首页
 
 
 
@@ -94,18 +94,18 @@ service-worker: true
 
 
 # Friends
-friends: [
-    {
-        title: "WP",
-        href: "https://wangpei.ink"
-    },{
-        title: "简书·BY",
-        href: "http://www.jianshu.com/u/e71990ada2fd"
-    },{
-        title: "Apple",
-        href: "https://apple.com"
-    },{
-        title: "Apple Developer",
-        href: "https://developer.apple.com/"
-    }
-]
+# friends: [
+    # {
+        # title: "WP",
+        # href: "https://wangpei.ink"
+    # },{
+        # title: "简书·BY",
+        # href: "http://www.jianshu.com/u/e71990ada2fd"
+    # },{
+        # title: "Apple",
+        # href: "https://apple.com"
+    # },{
+        # title: "Apple Developer",
+        # href: "https://developer.apple.com/"
+    # }
+# ]
