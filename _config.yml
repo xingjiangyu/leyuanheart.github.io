@@ -1,9 +1,9 @@
 # Site settings
-title: My Blog                              # 你博客的标题
-SEOTitle: 我的博客 | My Blog                # 显示在浏览器上搜索的时候显示的标题      
-header-img: img/post-bg-desk.jpg            # 显示在首页的背景图片
+title: Yuan's Blog                          # 你博客的标题
+SEOTitle: 沅的博客 | My Blog                # 显示在浏览器上搜索的时候显示的标题      
+header-img: img/wolf.jpg            # 显示在首页的背景图片
 email: leyuanno.1@outlook.com
-description: "写一句你想写的话"             # 说实话我还没发现这是用在哪的。。。
+description: "若是瞄准月亮，即使错失，也是落入星辰之中"             # 说实话我还没发现这是用在哪的。。。
 keyword: "我的博客"                         # 貌似也没什么用
 url: "http://leyuanheart.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
