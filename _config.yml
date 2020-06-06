@@ -1,7 +1,7 @@
 # Site settings
 title: Yuan's Blog                          # 你博客的标题
 SEOTitle: 沅的博客 | My Blog                # 显示在浏览器上搜索的时候显示的标题      
-header-img: img/wolf.jpg            # 显示在首页的背景图片
+header-img: img/wolf.jpg                    # 显示在首页的背景图片
 email: leyuanno.1@outlook.com
 description: "若是瞄准月亮，即使错失，也是落入星辰之中"             # 说实话我还没发现这是用在哪的。。。
 keyword: "我的博客"                         # 貌似也没什么用
@@ -12,7 +12,7 @@ github_repo: "https://github.com/leyuanheart/leyuanheart.github.io.git" # you co
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
 sidebar-about-description: "尽人事，听天命~"
-sidebar-avatar: /img/avatar_binggan.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
+sidebar-avatar: /img/sidebar.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
