@@ -5,8 +5,8 @@
     <description>写一句你想写的话</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 06 Jun 2020 10:25:49 +0800</pubDate>
-    <lastBuildDate>Sat, 06 Jun 2020 10:25:49 +0800</lastBuildDate>
+    <pubDate>Sat, 06 Jun 2020 14:56:18 +0800</pubDate>
+    <lastBuildDate>Sat, 06 Jun 2020 14:56:18 +0800</lastBuildDate>
     <generator>Jekyll v4.1.0</generator>
     
       <item>
@@ -63,7 +63,7 @@ For example, if you use ubuntu, you can cd to the path of the sh file and run th
 &lt;p&gt;Run the command below:&lt;/p&gt;
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;conda create &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; tf
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;&lt;img src=&quot;/img/20190328post.jpg&quot; alt=&quot;picture1&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/404-bg.jpg&quot; alt=&quot;picture1&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;‘tf’ is the name of your new conda environment, you can try other names as your own interest.&lt;/p&gt;
 
