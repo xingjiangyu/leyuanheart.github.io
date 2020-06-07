@@ -70,7 +70,7 @@ Ruby是Jekyll的编程语言，所以安装Jekyll之前需要先安装Ruby和相
 
 ![image-5](http://qbhhbul2c.bkt.clouddn.com/5.png)
 
-我下载的就是`WITH DEVKIT`里面的第三个，因为右边说了，不确定下哪个的话就下这个，稳当，然后就是正常的解压缩安装了。
+我下载的就是`WITH DEVKIT`里面的第三个，因为右边说了，不确定下哪个的话就下这个，稳当，然后就是正常的解压缩安装了，哦对了，别忘了在安装的时候勾选把工作目录添加到环境变量里的选项，这个看官网的步骤就行了。
 
 ### 2. Install the Jekyll Gem
 
