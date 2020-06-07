@@ -11,6 +11,8 @@ tags:
     - Jekyll
 ---
 
+# 前言
+
 花了一天时间终于把自己的博客主页给搭建好了，下面就分享一下这个过程。
 
 话不多说，还是先上自己参考过的文章
@@ -19,7 +21,116 @@ tags:
 - [搭建个人博客教程(基于github pages和jekyll)](https://wangpei.ink/2019/04/21/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B(%E5%9F%BA%E4%BA%8Egithub-pages%E5%92%8Cjekyll)/)
 
 - [博客搭建详细教程](https://github.com/qiubaiying/qiubaiying.github.io/wiki/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B)
-- [Jekyll官方中文网址](http://jekyllcn.com/docs/templates/)    [Jekyll官方网址](https://jekyllrb.com/)
 - [GitHub Pages + Jekyll 创建个人博客](https://www.jianshu.com/p/9535334ffd54)
 - [采用Jekyll + github 构建个人博客](https://www.jianshu.com/p/32af878fdf69)（这篇主要是安装Jekyll和本地运行时出现的一些可能的问题和解决办法）
+
+如果大家看了这几篇文章或者自己搜索了一些这方面的文章，应该都能够明白该怎么做（一定要有耐心，一篇看不太明白，多看几篇，他们里面相似的内容就基本上是有用且正确的了）。我这里就从我开始看到搭建好这么一套流程下来后，归纳整理了一套从简入深的理解版本，每个章节是相对独立的，但是彼此又所关联，希望能帮助到大家对这个问题形成一个系统的认识。
+
+# Github Pages
+
+如果不知道[Github](https://github.com/)，可以先去了解一下再回来。
+
+[Github Pages](https://pages.github.com/)是一个静态网站托管服务（相当于提供了一个存放网站的服务器），是Github提供的为个人或者是项目创建静态网站的工具，但如果你使用过Github，那就很简单了，其实就把它理解成一个repository（仓库）就行了，只是这个仓库有自己特殊的命名方式和其他的一些操作，接下来就是搬运官网里的介绍。
+
+![image-20200607155542581](D:\learngit\leyuanheart.github.io\img\githubpages_jekyll\1.png)
+
+新建一个仓库，然后命名成`github用户名.github.io`
+
+![image-20200607161610836](D:\learngit\leyuanheart.github.io\img\githubpages_jekyll\2.png)
+
+然后就可以在仓库里新建一个`index.html`文件，输入上图的代码，这是HTML语言，用来写网站的。
+
+其实这之前还有一步操作，它会让你选择你是用什么哪种git的方式，如果要涉及到本地操作的话，就要用到Git，如果不熟悉在终端用Git的话，推荐用[GitHub Desktop](https://desktop.github.com/)，同样能很方便的管理代码，而且省去了学git的时间（不过其实也还是要了解git的工作原理的，比如我，就现在[Git 教程-廖雪峰](https://www.liaoxuefeng.com/wiki/896043488029600)学了一遍（很早以前了），然后就选择了Github Desktop......），但其实你在Github网站上也是可以新建、删除、修改文件的，只是不那么方便而已，而且由于在国内，GitHub的速度有时候很感人，要是上传文件，你可能要等到天荒地老了，这里就不讨论这些问题了。
+
+![image-20200607162246884](D:\learngit\leyuanheart.github.io\img\githubpages_jekyll\3.png)
+
+然后其实你就已经完成了你的网站的建立了，在浏览器里输入`username.github.io`，你就能看到`index.html`文件解析成网页的结果，长成这样。
+
+![image-20200607162711778](D:\learngit\leyuanheart.github.io\img\githubpages_jekyll\4.png)
+
+如果你熟悉HTML语言的话，其实你直接写就可以了，但是我并不会，所以Jekyll就登场了。
+
+# Jekyll
+
+> Jekyll 是一个简单的博客形态的静态站点生产机器。它有一个模版目录，其中包含原始文本格式的文档，通过一个转换器（如 [Markdown](http://daringfireball.net/projects/markdown/)）和我们的 [Liquid](https://github.com/Shopify/liquid/wiki) 渲染器转化成一个完整的可发布的静态网站，你可以发布在任何你喜爱的服务器上。Jekyll 也可以运行在 [GitHub Page](http://pages.github.com/) 上，也就是说，你可以使用 GitHub 的服务来搭建你的项目页面、博客或者网站，而且是**完全免费**的。
+
+这是[中文版官网](http://jekyllcn.com/)上的介绍，简单来说，Jekyll就是一种将纯文本转换成静态网站的工具(软件)，就相当于它已经把一个网站的框架给你搭好了，比如这块是标题，那块是个人介绍等等，不用你自己去写一些HTML的语言了。你只需要专注写你的博客文，Jekyll负责把它们展示出来。（当然你还是得学习Jekyll的模板目录每块是用来放什么，不然也是白搭）
+
+接下来我们暂时忘记Github Pages，而是专注于Jekyll，首先要面对的就是安装它。
+
+## 安装
+
+虽然 Windows 并不是 Jekyll 官方支持的平台，但是也可以通过合适的方法使其运行在 Windows 平台上。我是参考官网上的安装方式 [官方Windows环境下Jekyll的安装](http://jekyll-windows.juthilo.com/)
+
+### 1. Install Ruby and the Ruby DevKit
+
+Ruby是Jekyll的编程语言，所以安装Jekyll之前需要先安装Ruby和相应的DevKit。
+
+这一步就和我前面提到的一些文章里说的不一样了，应该是因为要么提到安装的就是直接贴官方文档，要么就是2017甚至2016年的文章了，里面Ruby和DevKit是分开安装的，但是现在是可以打包一起安装的，问题不大，按照官网的步骤走，反正我是没有碰到什么问题......
+
+![image-20200607180106051](D:\learngit\leyuanheart.github.io\img\githubpages_jekyll\5.png)
+
+我下载的就是`WITH DEVKIT`里面的第三个，因为右边说了，不确定下哪个的话就下这个，稳当，然后就是正常的解压缩安装了。
+
+### 2. Install the Jekyll Gem
+
+Jekyll本身就是一个用Ruby写的software package，所以可以通过Ruby的`gem`命令来安装
+
+```bash
+gem install jekyll
+```
+
+到这里基本上就安装完成，你可以通过`jekyll -v`来查看版本号，如果碰到问题，可以参考这两篇文章
+
+- [GitHub Pages + Jekyll 创建个人博客](https://www.jianshu.com/p/9535334ffd54)
+- [采用Jekyll + github 构建个人博客](https://www.jianshu.com/p/32af878fdf69)
+
+虽然都是老文了，但仍然是很有用的，安装的时候我没碰到问题，到后面本地启动服务（不是这下面，而是在之后章节里拷贝模板到本地运行的时候）的时候还是遇到了一点麻烦，靠它们成功克服了。
+
+## 本地启动服务
+
+官方网站上提供了一个快速启动的例子
+
+```bash
+# 安装bundler，bundler通过Gemfile文件来管理gem包
+gem install  bundler
+
+# 创建一个新的Jekyll项目，并命名为myblog
+jekyll new myblog
+
+# 进入myblog目录
+cd myblog
+
+# 创建本地服务器，默认的运行地址为http://localhost:4000
+# bundle exec 表示在当前项目依赖的上下文环境中执行命令 jekyll serve
+bundle exec jekyll serve
+```
+
+`jekyll new myblog`这个过程时间还不短，不要急，等它跑完
+
+![quick start for jekyll](D:\learngit\leyuanheart.github.io\img\githubpages_jekyll\quick start for jekyll.png)
+
+`cd`到`myblog`目录下，可以看到里面有这些文件
+
+![image-20200607185745327](D:\learngit\leyuanheart.github.io\img\githubpages_jekyll\6.png)
+
+这和官网上贴出来的以及很多文章里展示的都不太一样，官网是长这个样子
+
+![image-20200607190151421](D:\learngit\leyuanheart.github.io\img\githubpages_jekyll\7.png)
+
+但是没有关系，这一小部分已经够生成一个看起来还不错的网站了，再运行`bundle exec jekyll serve`，当然直接运行`jekyll serve`也没问题，在浏览器里输入地址，可以看到
+
+![image-20200607190856054](D:\learngit\leyuanheart.github.io\img\githubpages_jekyll\8.png)
+
+点进去是这样的
+
+![image-20200607190717255](D:\learngit\leyuanheart.github.io\img\githubpages_jekyll\9.png)
+
+到这里其实已经可以算是入门了Jekyll了，后面的一些基本用法，比如`jekyll build`，`jekyll build --destination <destination>`等，如果你不是单独使用Jekyll的话可以不用掌握，也不要被这个吓着了，后面搭配GitHub Pages使用完全可以忽略这部分。关于目录结构里的每个文件夹对应放什么内容，每个文件表示什么意思，可以查看官网介绍，后面我也会介绍几个最常用的，其他的可能不是深入了解的都不会用到（反正我是这样的）。
+
+# GitHub Pages + Jekyll
+
+前面我们介绍了，GitHub Pages提供了一个静态网站的托管服务，Jekyll可以让那些不是很熟悉HTML的人也可以写出自己的网站，而Github Pages 支持自动利用 Jekyll 生成站点，这样 GitHub Pages + Jekyll就能方便地让你自己写的网站被全世界看到了。
+
+下面就是最重要的内容了，如何可以完整的在GitHub上创建自己的博客主页。
 
