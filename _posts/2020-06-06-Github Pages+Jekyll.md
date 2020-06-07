@@ -126,7 +126,9 @@ bundle exec jekyll serve
 
 ![image-9](http://qbhhbul2c.bkt.clouddn.com/9.png)
 
-到这里其实已经可以算是入门了Jekyll了，后面的一些基本用法，比如`jekyll build`，`jekyll build --destination <destination>`等，如果你不是单独使用Jekyll的话可以不用掌握，也不要被这个吓着了，后面搭配GitHub Pages使用完全可以忽略这部分。关于目录结构里的每个文件夹对应放什么内容，每个文件表示什么意思，可以查看官网介绍，后面我也会介绍几个最常用的，其他的可能不是深入了解的都不会用到（反正我是这样的）。
+到这里其实已经可以算是入门了Jekyll了，后面的一些基本用法，比如`jekyll build`，`jekyll build --destination <destination>`等，如果你不是单独使用Jekyll的话可以不用掌握，也不要被这个吓着了，后面搭配GitHub Pages使用完全可以忽略这部分。关于目录结构里的每个文件夹对应放什么内容，每个文件表示什么意思，可以查看官网介绍，其他的可能不是深入了解的都不会用到（反正我是这样的）。
+
+![image-15](http://qbhhbul2c.bkt.clouddn.com/15.png)
 
 # GitHub Pages + Jekyll
 
