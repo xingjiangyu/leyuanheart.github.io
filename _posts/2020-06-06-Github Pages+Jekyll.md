@@ -21,10 +21,10 @@ tags:
 - [搭建个人博客教程(基于github pages和jekyll)](https://wangpei.ink/2019/04/21/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B(%E5%9F%BA%E4%BA%8Egithub-pages%E5%92%8Cjekyll)/)
 - [博客搭建详细教程](https://github.com/qiubaiying/qiubaiying.github.io/wiki/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B)
 - [GitHub Pages + Jekyll 创建个人博客](https://www.jianshu.com/p/9535334ffd54)
-- [采用Jekyll + github 构建个人博客](https://www.jianshu.com/p/32af878fdf69)（这篇主要是安装Jekyll和本地运行时出现的一些可能的问题和解决办法）
+- [采用Jekyll + github 构建个人博客](https://www.jianshu.com/p/32af878fdf69)（这篇主要是安装Jekyll和本地运行时可能会出现的一些问题和解决办法）
 - [Git 忽略提交 .gitignore](https://www.jianshu.com/p/74bd0ceb6182)
 
-如果大家看了这几篇文章或者自己搜索了一些这方面的文章，应该都能够明白该怎么做（一定要有耐心，一篇看不太明白，多看几篇，他们里面相似的内容就基本上是有用且正确的了）。我这里就从我开始看到搭建好这么一套流程下来后，归纳整理了一套从简入深的理解版本，每个章节是相对独立的，但是彼此又所关联，希望能帮助到大家对这个问题形成一个系统的认识。
+如果大家看了这几篇文章或者自己搜索了一些这方面的文章，应该都能够明白该怎么做（一定要有耐心，一篇看不太明白，多看几篇，他们里面相似的内容就基本上是有用且正确的了）。我这里归纳整理了一套理解版本，希望能帮助到大家对这个问题形成一个系统的认识。
 
 # Github Pages
 
