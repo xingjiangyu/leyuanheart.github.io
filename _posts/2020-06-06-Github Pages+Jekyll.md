@@ -32,21 +32,21 @@ tags:
 
 [Github Pages](https://pages.github.com/)是一个静态网站托管服务（相当于提供了一个存放网站的服务器），是Github提供的为个人或者是项目创建静态网站的工具，但如果你使用过Github，那就很简单了，其实就把它理解成一个repository（仓库）就行了，只是这个仓库有自己特殊的命名方式和其他的一些操作，接下来就是搬运官网里的介绍。
 
-![image-1](http://qbhhbul2c.bkt.clouddn.com/1.png)
+![image-1](https://pic.downk.cc/item/5f095e6514195aa5942e34a3.png)
 
 新建一个仓库，然后命名成`github用户名.github.io`
 
-![image-2](http://qbhhbul2c.bkt.clouddn.com/2.png)
+![image-2](https://pic.downk.cc/item/5f095e6514195aa5942e34a7.png)
 
 然后就可以在仓库里新建一个`index.html`文件，输入上图的代码，这是HTML语言，用来写网站的。
 
 其实这之前还有一步操作，它会让你选择你是用什么哪种git的方式，如果要涉及到本地操作的话，就要用到Git，如果不熟悉在终端用Git的话，推荐用[GitHub Desktop](https://desktop.github.com/)，同样能很方便的管理代码，而且省去了学git的时间（不过其实也还是要了解git的工作原理的，比如我，就现在[Git 教程-廖雪峰](https://www.liaoxuefeng.com/wiki/896043488029600)学了一遍（很早以前了），然后就选择了Github Desktop......），但其实你在Github网站上也是可以新建、删除、修改文件的，只是不那么方便而已，而且由于在国内，GitHub的速度有时候很感人，要是上传文件，你可能要等到天荒地老了，这里就不讨论这些问题了。
 
-![image-3](http://qbhhbul2c.bkt.clouddn.com/3.png)
+![image-3](https://pic.downk.cc/item/5f095e6514195aa5942e34a9.png)
 
 然后其实你就已经完成了你的网站的建立了，在浏览器里输入`username.github.io`，你就能看到`index.html`文件解析成网页的结果，长成这样。
 
-![image-4](http://qbhhbul2c.bkt.clouddn.com/4.png)
+![image-4](https://pic.downk.cc/item/5f095e6514195aa5942e34ad.png)
 
 如果你熟悉HTML语言的话，其实你直接写就可以了，但是我并不会，所以Jekyll就登场了。
 
@@ -68,7 +68,7 @@ Ruby是Jekyll的编程语言，所以安装Jekyll之前需要先安装Ruby和相
 
 这一步就和我前面提到的一些文章里说的不一样了，应该是因为要么提到安装的就是直接贴官方文档，要么就是2017甚至2016年的文章了，里面Ruby和DevKit是分开安装的，但是现在是可以打包一起安装的，问题不大，按照官网的步骤走，反正我是没有碰到什么问题......
 
-![image-5](http://qbhhbul2c.bkt.clouddn.com/5.png)
+![image-5](https://pic.downk.cc/item/5f095e6514195aa5942e34af.png)
 
 我下载的就是`WITH DEVKIT`里面的第三个，因为右边说了，不确定下哪个的话就下这个，稳当，然后就是正常的解压缩安装了，哦对了，别忘了在安装的时候勾选把工作目录添加到环境变量里的选项，这个看官网的步骤就行了。
 
@@ -108,27 +108,27 @@ bundle exec jekyll serve
 
 `jekyll new myblog`这个过程时间还不短，不要急，等它跑完
 
-![quick start for jekyll](http://qbhhbul2c.bkt.clouddn.com/quick start for jekyll.png)
+![quick start for jekyll](https://pic.downk.cc/item/5f095f1014195aa5942e671b.png)
 
 `cd`到`myblog`目录下，可以看到里面有这些文件
 
-![image-6](http://qbhhbul2c.bkt.clouddn.com/6.png)
+![image-6](https://pic.downk.cc/item/5f095f2414195aa5942e6d22.png)
 
 这和官网上贴出来的以及很多文章里展示的都不太一样，官网是长这个样子
 
-![image-7](http://qbhhbul2c.bkt.clouddn.com/7.png)
+![image-7](https://pic.downk.cc/item/5f095f2414195aa5942e6d24.png)
 
 但是没有关系，这一小部分已经够生成一个看起来还不错的网站了，再运行`bundle exec jekyll serve`，当然直接运行`jekyll serve`也没问题，在浏览器里输入地址，可以看到
 
-![image-8](http://qbhhbul2c.bkt.clouddn.com/8.png)
+![image-8](https://pic.downk.cc/item/5f095f2414195aa5942e6d28.png)
 
 点进去是下面这样的
 
-![image-9](http://qbhhbul2c.bkt.clouddn.com/9.png)
+![image-9](https://pic.downk.cc/item/5f095f2414195aa5942e6d2c.png)
 
 到这里其实已经可以算是入门了Jekyll了，后面的一些基本用法，比如`jekyll build`，`jekyll build --destination <destination>`等，如果你不是单独使用Jekyll的话可以不用掌握，也不要被这个吓着了，后面搭配GitHub Pages使用完全可以忽略这部分。关于目录结构里的每个文件夹对应放什么内容，每个文件表示什么意思，可以查看官网介绍，其他的可能不是深入了解的都不会用到（反正我是这样的）。
 
-![image-15](http://qbhhbul2c.bkt.clouddn.com/15.png)
+![image-15](https://pic.downk.cc/item/5f095f7914195aa5942e8cd2.png)
 
 # GitHub Pages + Jekyll
 
@@ -142,17 +142,17 @@ bundle exec jekyll serve
 
 ## 2. 在GitHub上找一个博客模板
 
-![image-10](http://qbhhbul2c.bkt.clouddn.com/10.png)
+![image-10](https://pic.downk.cc/item/5f095f2414195aa5942e6d2f.png)
 
 这上面有很多模板，我用的是第一个（其实我并不是直接用的第一个，而是根据我前面文章里的步骤拷贝了一个模板，之后在总结的时候又找到了它的最原始出处[Huxpro](https://github.com/Huxpro/huxpro.github.io)，不过这个博客主页因为是他自己的主页，经常会更新，所以他提供了一个稳定版 [huxblog-boilerplate](https://github.com/Huxpro/huxblog-boilerplate)，说白了就是供人下载的版本），这是他模板的样子。
 
-![image-11](http://qbhhbul2c.bkt.clouddn.com/11.png)
+![image-11](https://pic.downk.cc/item/5f095f9814195aa5942e977a.png)
 
 你把它下载下来，把解压的文件全部复制到自己的本地仓库里，然后你读他的中文版的[README](https://github.com/Huxpro/huxblog-boilerplate/blob/master/README.zh.md)，基本就知道怎么改它里面的一些设置，然后再结合在本地预览博客，就可以开始玩自己的博客，最主要的两个我放图在这里，其他的就不再介绍了。
 
-![image-12](http://qbhhbul2c.bkt.clouddn.com/12.png)
+![image-12](https://pic.downk.cc/item/5f095f9814195aa5942e977d.png)
 
-![image-13](http://qbhhbul2c.bkt.clouddn.com/13.png)
+![image-13](https://pic.downk.cc/item/5f095f9814195aa5942e9782.png)
 
 ## 3. 在本地启动Jekyll服务来预览博客
 
@@ -160,7 +160,7 @@ bundle exec jekyll serve
 
 但其实本地运行有时是会出现错误的，最主要的原因是Jekyll的版本不一样导致的问题，因为很多模板并不是及时更新的，由于我并不是直接以这个模板来运行的，所以我不确定会不会有问题，但是我在运行的时候是出现了问题的，原因是模板使用的Jekyll的版本和我安装的版本不一样，所以会出现如下警告
 
-![image-14](http://qbhhbul2c.bkt.clouddn.com/14.png)
+![image-14](https://pic.downk.cc/item/5f095f9814195aa5942e978b.png)
 
 你出现的警告可能和这个不完全一样，但类型应该是一样的，都是`unexpected character`，这时候你要么就是卸掉你安装的最新版的Jekyll，安装它指定版本的
 
