@@ -740,9 +740,9 @@ km_bfs(profit)
 
 ![26.png](https://pic.downk.cc/item/5f09680014195aa594315d9d.png)
 
-!![27.png](https://pic.downk.cc/item/5f09680014195aa594315d9f.png)
+![27.png](https://pic.downk.cc/item/5f09680014195aa594315d9f.png)
 
-!![28.png](https://pic.downk.cc/item/5f09680014195aa594315da1.png)
+![28.png](https://pic.downk.cc/item/5f09680014195aa594315da1.png)
 
 ![29.png](https://pic.downk.cc/item/5f09680014195aa594315da3.png)
 
