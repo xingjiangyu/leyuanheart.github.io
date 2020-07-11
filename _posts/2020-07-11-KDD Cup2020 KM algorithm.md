@@ -211,7 +211,7 @@ prob.X
 
 ### 2、深度搜索优先（DFS）和广度搜索优先（BFS）
 
-关于DFS和BFS的介绍包括如何用python来实现，我是参考了这几篇文章
+关于DFS和BFS的介绍，包括如何用python来实现，我是参考了这几篇文章
 
 - [python中的 DFS 与 BFS](https://www.jianshu.com/p/b215152a85fb)
 - [Understanding the Breadth-First Search with Python](https://medium.com/@yasufumy/algorithm-breadth-first-search-408297a075c9)
