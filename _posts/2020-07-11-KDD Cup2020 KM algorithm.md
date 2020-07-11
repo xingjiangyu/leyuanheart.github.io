@@ -58,7 +58,7 @@ tags:
 
 ![7.png](https://pic.downk.cc/item/5f09663314195aa59430cf71.png)
 
-哦，对了，我们主要是参考了这篇文章：[Large-Scale Order Dispatch in On-Demand Ride-Hailing Platforms: A Learning and Planning Approach](order_dispatch.pdf)
+哦，对了，我们主要是参考了这篇文章：[Large-Scale Order Dispatch in On-Demand Ride-Hailing Platforms: A Learning and Planning Approach](https://dl.acm.org/doi/pdf/10.1145/3219819.3219824)
 
 上图中的$A_{\pi}$就是权重矩阵，要优化的就是$a$，是一个和$A_{\pi}$一样的矩阵，里面元素全为0或者1，然后带有约束，每行和每列的和加起来不超过1，也就是每个行标和列标做多只能有一个匹配，然后我们这个带约束的优化问题用代码表示出来即可，求解就交给cvxpy，假设我们已经有了权重矩阵，先放一个比较好理解的版本：
 
