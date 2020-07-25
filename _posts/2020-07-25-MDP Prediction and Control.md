@@ -28,7 +28,7 @@ $$
  - 输出：value function $v^{\pi}$
 2. Control（寻找最优的策略）
  - 输入一个MDP（$S,A,R,P,\gamma$）
- - 输出：最优value function $v^*$，最优策略$\pi^*$.
+ - 输出：最优value function $v^\*$，最优策略$\pi^\*$
 
 当转移概率和reward function已知的情况下，可以用**动态规划**来求解上述两个问题。
 
