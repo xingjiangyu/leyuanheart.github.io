@@ -236,6 +236,7 @@ agent 要学会从起点走到目的地，并且不要掉进窟窿，如果走�
 ```python
 import gym
 env_name  = 'FrozenLake-v0' # 'FrozenLake8x8-v0'
+
 env = gym.make(env_name)
 
 env.action_space, env.observation_space
@@ -316,6 +317,7 @@ def evaluate_policy(env, policy, gamma=1):
         这个sum是里面那个转移概率求平均
         '''
         if (np.sum(np.fabs(v-pre_v)) <= eps):    # np.fabs: elementwise 计算绝对值
+        
             break
     return v
     
@@ -437,7 +439,8 @@ def value_iteration(env, gamma=1):
         if (np.sum(np.fabs(v-v_old)) <= eps):
             print('value iteration converged at iter: %d' % (i+1))
             break
-    # print(v)          
+    # print(v)
+    
     return v
     
 # 下面这个写法更高效，可以不用创建q，而且注意这里和前面的policy iteration中的policy evaluation不同，这里是要计算s下所有的a，然后max，而之前是通过policy产生a再更新
@@ -522,7 +525,7 @@ print('Average scores = ', scores)
 # Average scores =  0.64
 ```
 
-可以看到两种方法得到的策略最后都是一样的，在线评估的结果由于随机性的原因不一样很正常。
+可以看到两种方法得到的策略最后都是一样的，在线评估的结果由于环境随机性的原因不一样很正常。
 
 > 还有我发现在本地写markdown显示的公式和上传到服务器山显示出来的不一样，尤其是行内的公式，原因是行内公式如果涉及 `(*,|)` 这些markdown里的具有作用的符号，写在公式里就必须要用 `\` 转义一下。
 
