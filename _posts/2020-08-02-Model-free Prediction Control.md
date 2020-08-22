@@ -226,6 +226,84 @@ n-step TD: $v(S_t)\leftarrow v(S_t)+\alpha \big( G_t^n-v(S_t)\big)$
 
 你会发现当向前走无穷多步时，TD就变成了MC。
 
+### TD($\lambda$)
+
+这一块是补充的内容，之前没有学习到，还是在帮老师做课件的时候才发现，现在补上，里面有一些思想是挺有启发性的（虽然我觉得我还没有彻底理解）。关于这一部分的参考：
+
+[强化学习入门 第四讲 时间差分法（TD方法)](https://zhuanlan.zhihu.com/p/25913410)
+
+[强化学习（五）用时序差分法（TD）求解](https://www.cnblogs.com/pinard/p/9529828.html)
+
+[机器学习（二十九）——Temporal-Difference Learning](https://blog.csdn.net/antkillerfarm/article/details/80305492)
+
+上一节讲到，我们可以做n-step TD，就是说对于value函数，我们其实是有n个估计值，然后我们选择用哪一个，那能不能把这n个估计值都用起来呢，这就是TD($\lambda$)的想法，引入一个新的参数$\lambda$，通过加权的方法将n个估计值融合。
+
+定义一个$\lambda$-return：
+
+
+$$
+G_t^{\lambda}=(1-\lambda)\sum_{n=1}^{\infty}\lambda^{n-1}G_t^{(n)}
+$$
+
+
+每一个$G_t^{(n)}$的权重是$(1-\lambda)\lambda^{(n-1)}$，这个权重的直观概念可以从下图可以看得比较明白，随着n的增大，第n步return的权重呈几何级数的衰减，当在T时刻达到终止状态时，未分配的权重全部给予中状态的实际return。所有权重加起来等于1，离当前状态越远的return权重越小。当$\lambda=0$时，就变成了TD(0)，当$\lambda=1$时，就变成了MC。
+
+![td1](https://pic.downk.cc/item/5f4130f7160a154a67cd0c06.png)
+
+然后就用$G_t^{\lambda}$来更新value函数：$V(S_t)\leftarrow V(S_t)+\alpha(G_t^{\lambda})-V(S_t)$，关于TD($\lambda$)，比较有意思的是可以从两种视角来看待。
+
+#### 前向视角
+
+这是一个正常的理解逻辑，由于$G_t^{\lambda}$中有$G_t^{(n)}$，而$G_t^n=R_{t+1}+\gamma R_{t+2}+\ldots+\gamma^{n-1}R_{t+n}+\gamma^nv(S_{t+n})$，所以其实也是需要等到整个episode结束之后才能更新的。那么是不是可以不需要等到episode结束就更新当前的value函数呢，这就要利用TD($\lambda$)的后向视角了。
+
+![td2](https://pic.downk.cc/item/5f413169160a154a67cd39a1.png)
+
+#### 后向视角
+
+![td3](https://pic.downk.cc/item/5f413169160a154a67cd39a3.png)
+
+先形象地解释一下这幅图表示的意思，就是说在当前时刻t处于状态$s_t$，采取action到达$s_{t+1}$之后，计算TD error，然后相当有一个人面朝已经经历过的状态喊话，告诉它们需要利用当前的TD error来进行更新，此时过往的每个状态value函数更新的大小应该更跟距离当前状态的步数有关。所以$s_{t-1}$处的更新应该乘以一个衰减因子$\gamma \lambda$，$s_{t-2}$处的更新应该乘以$(\gamma \lambda)^2$，以此类推。
+
+![td4](https://pic.downk.cc/item/5f4131a4160a154a67cd5150.png)
+
+这个对过去状态更新采用不同权重的做法可以理解成过去状态对当前状态的影响程度，影响大的自然要更新的多一些，比如老鼠在连续接受了3次响铃和1次亮灯后遭到了电击，那么在分析遭到电击的原因时，到底是响铃因素比较重要还是亮灯因素比较重要呢？这里就有两种考量：
+
+1. 频率启发（frequency heuristic）：归因于过去发生次数多的因素
+2. 就近启发（recency heuristic）：归因于最近发生的因素
+
+为了同时利用上述的两种启发，对于每一个状态引入一个数值：**效用（eligibilty, E）**，而它随着时间变化的函数叫做**效用迹（eligibility trace, ET）**：
+
+
+$$
+\begin{gather}
+E_0(s)=0 \\
+E_t(s)=\gamma \lambda E_{t-1}(s)+I(s=S_t)
+\end{gather}
+$$
+![td5](https://pic.downk.cc/item/5f413169160a154a67cd39a5.png)
+
+上图是一个可能的效用迹的图，横坐标下面的竖线代表当前时刻t进入和状态s，可以看出，当状态s出现的次数增加1时，它的ET是会增加1的，然后随着时间的推移，它的ET会逐渐衰减，我们就用ET来作为每个时刻各个状态更新的权重。因此从后向视角来看，可以提供一种增量式的更新方法：$V(s) \leftarrow V(s) + \alpha \delta_t E_t(s)$，具体的算法如下：
+
+1. 计算当前状态的TD error：$\delta_t=R_{t+1}+\gamma V(S_{t+1})-V(S_t)$
+
+2. 更新效用迹（注意这里是更新之前所有见过到过的状态）：
+
+$$
+E_t(s)=
+\begin{cases}
+\gamma \lambda E_{t-1}, &  \text{if } s \neq s_t \\
+\gamma \lambda E_{t-1}+1, &  \text{if } s = s_t
+\end{cases}
+$$
+
+3. 更新之前见到过得所有状态的value函数：$V(s) \leftarrow V(s) + \alpha \delta_t E_t(s)$
+
+#### 前向和后向的等价性
+
+这里所说的等价性，指的是在一个episode结束后，每个状态的value函数的更新总量都是$G_t^{\lambda}-V(S_t)$，证明就不手打了，tricks我用红笔标出来了。
+
+![td6](https://pic.downk.cc/item/5f4130f7160a154a67cd0c08.png)
+
 ### TD learning 代码
 
 ```python
@@ -406,6 +484,46 @@ $R_{t+1}+\gamma Q(S_{t+1},A_{t+1})$叫做TD target。
 
 ![22](https://pic.downk.cc/item/5f26127b14195aa5945d6d91.png)
 
+#### Sarsa($\lambda$)
+
+这里是接上面的TD($\lambda$)，直接放一下算法流程吧：
+
+算法输入：迭代轮数$T$，状态集$S$, 动作集$A$, 步长$\alpha$，衰减因子$\gamma$, 探索率$\epsilon$, 多步参数$\lambda$
+
+1. 随机初始化所有的状态和动作对应的价值$Q$. 对于终止状态其$Q$值初始化为0.
+
+2. for i from 1 to T，进行迭代:
+
+- 初始化所有状态动作的效用迹$E$为0，初始化$S$为当前状态序列的第一个状态。设置$A$为$\epsilon$−贪婪法在当前状态$S$选择的动作。
+
+- - 在状态$S$执行当前动作$A$, 得到新状态$S'$和奖励$R$
+
+- - 用$\epsilon$−贪婪法在状态$S'$选择新的动作$A'$
+
+- - 更新效用迹函数$E(S,A)$和TD误差$\delta$:
+
+$$
+\begin{gather}
+E(S,A)=E(S,A)+1 \\
+\delta=R_{t+1}+\gamma Q(S',A')-Q(S,A)
+\end{gather}
+$$
+
+- - 对当前序列所有出现的状态$s$和对应动作$a$, 更新价值函数$Q(s,a)$和效用迹函数$E(s,a)$:
+
+$$
+\begin{gather}
+Q(s,a)=Q(s,a)+\alpha \delta E(s,a)   \\
+E(s,a)=\gamma \lambda E(s,a)
+\end{gather}
+$$
+
+- - $S=S'$, $A=A'$
+
+- - 如果$S′$是终止状态，当前轮迭代完毕				
+
+输出：所有的状态和动作对应的价值$Q$	
+
 ### On-policy vs. Off-policy Learning
 
 又需要介绍一对强化学习里很重要的概念了。
@@ -438,16 +556,14 @@ $$
 
 3. Q-learning target：
    
-   $$
+$$
    R_{t+1}+\gamma Q(S_{t+1},A') = R_{t+1}+\gamma Q(S_{t+1}, \arg \underset{a'}{\max}Q(S_{t+1},a'))=R_{t+1}+\gamma \underset{a'}{\max}Q(S_{t+1},a')
-   $$
-
+$$
 4. Q-learning update:
    
-   $$
+$$
    Q(S_t,A_t) \leftarrow Q(S_t,A_t)+\alpha[R_{t+1}+\gamma \underset{a'}{\max}Q(S_{t+1},a')-Q(S_t,A_t)]
-   $$
-
+$$
 ![24](https://pic.downk.cc/item/5f2612b314195aa5945d7bf2.png)
 
 ### Sarsa和Q-learning的代码
@@ -592,7 +708,6 @@ env.close()
 这里先简单介绍一下**Importance Sampling**，之后介绍policy-based RL的时候还会详细介绍。
 
 Importance Sampling的思想用一个公式就可以表达：
-
 
 $$
 \mathbb{E}_{x\sim p(x)}[f(x)]=\int p(x)f(x)dx=\int q(x)\frac{p(x)}{q(x)}f(x)dx=\mathbb{E}_{x\sim q(x)}[\frac{p(x)}{q(x)}f(x)]
