@@ -274,12 +274,15 @@ $$
 为了同时利用上述的两种启发，对于每一个状态引入一个数值：**效用（eligibilty, E）**，而它随着时间变化的函数叫做**效用迹（eligibility trace, ET）**：
 
 
+
 $$
 \begin{gather}
 E_0(s)=0 \\
 E_t(s)=\gamma \lambda E_{t-1}(s)+I(s=S_t)
 \end{gather}
 $$
+
+
 ![td5](https://pic.downk.cc/item/5f413169160a154a67cd39a5.png)
 
 上图是一个可能的效用迹的图，横坐标下面的竖线代表当前时刻t进入和状态s，可以看出，当状态s出现的次数增加1时，它的ET是会增加1的，然后随着时间的推移，它的ET会逐渐衰减，我们就用ET来作为每个时刻各个状态更新的权重。因此从后向视角来看，可以提供一种增量式的更新方法：$V(s) \leftarrow V(s) + \alpha \delta_t E_t(s)$，具体的算法如下：
@@ -708,7 +711,6 @@ env.close()
 这里先简单介绍一下**Importance Sampling**，之后介绍policy-based RL的时候还会详细介绍。
 
 Importance Sampling的思想用一个公式就可以表达：
-
 $$
 \mathbb{E}_{x\sim p(x)}[f(x)]=\int p(x)f(x)dx=\int q(x)\frac{p(x)}{q(x)}f(x)dx=\mathbb{E}_{x\sim q(x)}[\frac{p(x)}{q(x)}f(x)]
 $$
