@@ -1016,7 +1016,7 @@ $$
 $$
 
 
-真实执行的动作是$a_t=3$，那么在监督学习里，$s_t$就会有一个label：$\begin{bmatrix} 0 \\0 \\ 1\end{bmatrix}$，然后我们用cross-entropy loss来表示它们之间的差异$CE_{loss}(\pi_{\theta}(s_t),label)=\log\pi_{\theta}(a_t\|s_t)=\log0.2*0+\log0.3*0+\log0.5*1$，但是在强化学习中，这个label并不是一定是最优策略产生的动作（应该可以说一定不是），所以不一定是正确的label。于是我们使用$G_t$对梯度做一个加权，$G_t$大的就是好的action，我们鼓励策略去产生能够得到更大reward的轨迹，就像下图中展示的那样。
+真实执行的动作是$a_t=3$，那么在监督学习里，$s_t$就会有一个label：$\begin{bmatrix} 0 \\\\0 \\\\ 1\end{bmatrix}$，然后我们用cross-entropy loss来表示它们之间的差异$CE_{loss}(\pi_{\theta}(s_t),label)=\log\pi_{\theta}(a_t\|s_t)=\log0.2 \times 0+\log0.3 \times 0+\log0.5\times1$，但是在强化学习中，这个label并不是一定是最优策略产生的动作（应该可以说一定不是），所以不一定是正确的label。于是我们使用$G_t$对梯度做一个加权，$G_t$大的就是好的action，我们鼓励策略去产生能够得到更大reward的轨迹，就像下图中展示的那样。
 
 ![45](https://pic.downk.cc/item/5f7ebe5a1cd1bbb86baed38e.png)
 
