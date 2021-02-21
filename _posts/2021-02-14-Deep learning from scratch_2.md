@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Deep learning from scratch 2
-subtitle:   Perceptron and Neural Network
+subtitle:   Neural Network Learning
 date:       2021-02-14
 author:     Le Yuan
 header-img: img/wolf.jpg
