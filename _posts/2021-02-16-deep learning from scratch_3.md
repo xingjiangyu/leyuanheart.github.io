@@ -1,6 +1,16 @@
-# Deep learning from scratch 3
+---
+layout:     post
+title:      Deep learning from scratch 3
+subtitle:   Error Back-Propagation Method
+date:       2021-02-16
+author:     Le Yuan
+header-img: img/wolf.jpg
+catalog: true
+tags:
+    - Deep Learning
+---
 
-<img src="figs\封面.jpeg" alt="fengmian" style="zoom:50%;" />
+<img src="https://img.imgdb.cn/item/60311e2d5f4313ce25b859d6.jpg" alt="fengmian" style="zoom:50%;" />
 
 ## 误差反向传播法
 
@@ -14,7 +24,7 @@
 
 问题：太郎在超市买了2 个苹果、3 个橘子。其中，苹果每个 100 日元，橘子每个 150 日元。消费税是 10%，请计算支付金额。
 
-![30](figs\30.png)
+![30](https://img.imgdb.cn/item/6031c1d35f4313ce25e9cf15.png)
 
 计算图通过节点和箭头表示计算过程。节点用$\bigcirc$表示，$\bigcirc$中是要进行的操作。将计算的中间结果写在箭头的上方，表示各个节点的计算结果从左向右传递。
 
@@ -24,7 +34,7 @@
 
 我们用一个具体的例子来说明局部计算。比如，在超市买了 2 个苹果和其他很多东西。此时，可以画出如下的计算图。
 
-![31](figs\31.png)
+![31](https://img.imgdb.cn/item/6031c5d35f4313ce25eb38a1.png)
 
 假设（经过复杂的计算）购买的其他很多东西总共花费 4000 日元。 这里的重点是，各个节点处的计算都是局部计算。这意味着，例如苹果和其他很多东西的求和运算 $(4000+200 \rightarrow 4200)$ 并不关心 4000 这个数字是如何计算而来的，只要把两个数字相加就可以了。换言之，各个节点处只需进行与自己有关的计算（在这个例子中是对输入的两个数字进行加法运算），不用考虑全局。
 
@@ -40,7 +50,7 @@
 
 假设存在$y=f(x)$的计算，这个计算的反向传播如下图：
 
-![32](figs\32.png)
+![32](https://img.imgdb.cn/item/6031c5d35f4313ce25eb38a4.png)
 
 如图所示，反向传播的计算顺序是，将信号 $E$ 乘以节点的局部导数 $\left(\frac{\partial y}{\partial x}\right),$ 然后将结果传递给下一个节点。这里所说的局部导数是指正向传播中 $y=f(x)$ 的导数，也就是 $y$ 关于 $x$ 的导数 $\left(\frac{\partial y}{\partial x}\right)$。 比如，假设 $y=f(x)=x^{2},$ 则局部导数为 $\frac{\partial y}{\partial x}=2 x$ 。把这个局部导数乘以上游传过来的值 (本例中为 $E$ ），然后传递给前面的节点。
 
@@ -51,13 +61,17 @@
 求导链式法则我就不介绍了，直接看一下它是如何在计算图中使用的。
 
 我们以一个函数为例：$z=(x+y)^2$，它可以看成两个式子的复合：
+
+
 $$
 \begin{align}
 &z = t^2\\
 &t = x + y
 \end{align}
 $$
-![33](figs\33.png)
+
+
+![33](https://img.imgdb.cn/item/6031c5d35f4313ce25eb38a6.png)
 
 如图所示，计算图的反向传播从右到左传播信号。反向传播的计算顺序是，先将节点的输入信号乘以节点的局部导数（偏导数），然后再传递给下一个节点。比如，反向传播时，“**2”节点输入的是 $\frac{\partial z}{\partial z}$，将其乘以局部导数 $\frac{\partial z}{\partial t}$（因为正向传播时输入是t、输出是z，所以这个节点的局部导数是 $\frac{\partial z}{\partial t}$），然后传递给下一个节点。
 
@@ -70,6 +84,8 @@ $$
 #### 加法节点的反向传播
 
 首先来考虑加法节点的反向传播。这里以 $z=x+y$ 为对象，观察它的反向传播。 $z=x$ $+y$ 的导数可由下式（解析性地）计算出来。
+
+
 $$
 \begin{array}{l}
 
@@ -79,15 +95,19 @@ $$
 
 \end{array}
 $$
+
+
 因此，用计算图表示的话，如下图：
 
-![34](figs\34.png)
+![34](https://img.imgdb.cn/item/6031c5d35f4313ce25eb38aa.png)
 
 在图中，反向传播将从上游传过来的导数（本例中是 $\frac{\partial L}{\partial x}$ ) 乘以 1 , 然后传向下游。也就是说，因为加法节点的反向传播只乘以 1 , 所以输入的值会原封不动地流向下一 个节点。
 
 #### 乘法节点的反向传播
 
 接下来，我们看一下乘法节点的反向传播。这里我们考虑 $z=x y$ 。这个式子的导数表示如下：
+
+
 $$
 \begin{array}{l}
 
@@ -97,9 +117,11 @@ $$
 
 \end{array}
 $$
+
+
 根据式子，我们可以画出计算图。
 
-![35](figs\35.png)
+![35](https://img.imgdb.cn/item/6031c5d35f4313ce25eb38ac.png)
 
 乘法的反向传播会将上游的值乘以正向传播时的输入信号的“翻转值”后传递给下游。 翻转值表示一种翻转关系，如图 正向传播时信号是 $x$ 的话，反向传播时则是 $y$； 正向传播时信号是 $y$ 的话，反向传播时则是 $x$。另外，加法的反向传播知识将上游的值传给下游，并不需要正向传播的输入信号。但是，**乘法的反向传播需要正向传播时的输入信号值**。因此，实现乘法节点的反向传播时，要保存正向传播的输入信号。
 
@@ -111,7 +133,7 @@ $$
 
 #### 乘法层的实现
 
-层的实现中有两个共通的方法（接口）forward()和backward()。分别对应正向传播和反向传播，像Pytorch这样的深度学习框架也会沿用这样的命名规则。
+层的实现中有两个共通的方法（接口）`forward`()和`backward`()。分别对应正向传播和反向传播，像Pytorch这样的深度学习框架也会沿用这样的命名规则。
 
 ```python
 class MulLayer(object):
@@ -128,6 +150,7 @@ class MulLayer(object):
     
     def backward(self, dout):
         dx = dout * self.y  # 翻转x和y
+        
         dy = dout * self.x
         
         return dx, dy
@@ -135,7 +158,7 @@ class MulLayer(object):
 
 现在我们使用`MulLayer`来实现下图买苹果的例子。
 
-![36](figs\36.png)
+![36](https://img.imgdb.cn/item/6031c60d5f4313ce25eb570a.png)
 
 ```python
 apple = 100
@@ -146,21 +169,26 @@ mul_apple_layer = MulLayer()
 mul_tax_layer = MulLayer()
 
 # forward
+
 apple_price = mul_apple_layer.forward(apple, apple_num)
 price = mul_tax_layer.forward(apple_price, tax)
 
 # backward
+
 dprice = 1
 dapple_price, dtax = mul_tax_layer.backward(dprice)
 dapple, dapple_num = mul_apple_layer.backward(dapple_price)
 
 print("price:", int(price))            # 220
+
 print("dApple:", dapple)               # 2.2
+
 print("dApple_num:", int(dapple_num))  # 110
+
 print("dTax:", dtax)                   # 200
 ```
 
-调用backward()的顺序与调用forward()的顺序相反。此外，要注意backward()的参数中需要输入“关于正向传播时的输出变量的导数”。比如，`mul_apple_layer`在正向传播时会输出apple_price，在反向传播时，则会将apple_price的导数dapple_price设为参数。
+调用`backward`()的顺序与调用`forward`()的顺序相反。此外，要注意`backward`()的参数中需要输入“关于正向传播时的输出变量的导数”。比如，`mul_apple_layer`在正向传播时会输出apple_price，在反向传播时，则会将apple_price的导数dapple_price设为参数。
 
 #### 加法层的实现
 
@@ -183,7 +211,7 @@ class AddLayer:
 
 然后我们就可以用加法层和乘法层来实现买苹果和桔子的例子了。
 
-![37](figs\37.png)
+![37](https://img.imgdb.cn/item/6031c60d5f4313ce25eb570d.png)
 
 ```python
 apple = 100
@@ -193,29 +221,43 @@ orange_num = 3
 tax = 1.1
 
 # layer
+
 mul_apple_layer = MulLayer()
 mul_orange_layer = MulLayer()
 add_apple_orange_layer = AddLayer()
 mul_tax_layer = MulLayer()
 
 # forward
+
 apple_price = mul_apple_layer.forward(apple, apple_num)  # (1)
+
 orange_price = mul_orange_layer.forward(orange, orange_num)  # (2)
+
 all_price = add_apple_orange_layer.forward(apple_price, orange_price)  # (3)
+
 price = mul_tax_layer.forward(all_price, tax)  # (4)
 
 # backward
+
 dprice = 1
 dall_price, dtax = mul_tax_layer.backward(dprice)  # (4)
+
 dapple_price, dorange_price = add_apple_orange_layer.backward(dall_price)  # (3)
+
 dorange, dorange_num = mul_orange_layer.backward(dorange_price)  # (2)
+
 dapple, dapple_num = mul_apple_layer.backward(dapple_price)  # (1)
 
 print("price:", int(price))             # 715
+
 print("dApple:", dapple)                # 110
+
 print("dApple_num:", int(dapple_num))   # 2.2
+
 print("dOrange:", dorange)              # 3.3
+
 print("dOrange_num:", int(dorange_num)) # 165
+
 print("dTax:", dtax)                    # 650
 ```
 
@@ -224,12 +266,16 @@ print("dTax:", dtax)                    # 650
 #### ReLU层
 
 ReLU（Rectified Linear Unit）由下式表示：
+
+
 $$
 y = \begin{cases}
 x, & x >0 \\
 0, & x \leq 0
 \end{cases}
 $$
+
+
 其导数为：
 $$
 \frac{\partial y}{\partial x} = \begin{cases}
@@ -237,9 +283,11 @@ $$
 0, & x \leq 0
 \end{cases}
 $$
+
+
 其实ReLU在0点不可导，而是存在次梯度，在[0, 1]之间。我们可以选择0作为它在0点的“导数”，在这里对结果并不会造成什么影响。
 
-![38](figs\38.png)
+![38](https://img.imgdb.cn/item/6031c60d5f4313ce25eb570f.png)
 
 ```python
 class Relu(object):
@@ -261,18 +309,22 @@ class Relu(object):
 #### Sigmoid层
 
 sigmoid函数的表达式：
+
+
 $$
 y = \frac{1}{1+\exp(-x)}
 $$
+
+
 用计算图表示的话，则为：
 
-![39](figs\39.png)
+![39](https://img.imgdb.cn/item/6031c60d5f4313ce25eb5711.png)
 
 图中，除了“$\times$”和“+”节点之外，还出现了新的“exp”和“/”节点。其实在这里就有些体现出基于数学式的理解和基于计算图理解之间的差异了，如果是基于数学式的话，在这里就直接对sigmoid函数求导了。但是，基于计算图的话，会将这个过程拆解成一些基本的运算步骤，然后一步步的操作。我的感觉是：第一遍学要从计算图学起，得知道是怎么一步步过来的。走完一遍之后，再用的时候其实还是直接求导了。
 
 这一部分比较长，我就直接放书中的截图了。
 
-![40](figs\40.png)
+![40](https://img.imgdb.cn/item/6031c60d5f4313ce25eb5713.png)
 
 ```python
 class Sigmoid(object):
@@ -291,24 +343,28 @@ class Sigmoid(object):
 
 ### Affine层的实现
 
-几何中，仿射变化包括一次线性变换和一次评平移，分别对应神经网络的加权运算和加偏置运算。
+几何中，仿射变化包括一次线性变换和一次平移，分别对应神经网络的加权运算和加偏置运算。
 
-![41](figs\41.png)
+![41](https://img.imgdb.cn/item/6031c6395f4313ce25eb6877.png)
 
 要注意这里的$X,W,B$是矩阵（对维数组）。之前计算图中各节点间流动的是标量。相应导数的推导和标量是类似的。“+”对应标量的加法，“dot”对应标量的“$\times$”。只不过变成矩阵后要考虑矩阵的形状。我们知道$W$和$\frac{\partial L}{\partial W}$形状相同。比如，$\frac{\partial L}{\partial Y}$的形状是 (3, )，$W$的形状是 (2, 3)，思考$\frac{\partial L}{\partial Y}$和$W$如何相乘，能使得$\frac{\partial L}{\partial X}$的形状为 (2, )，这样一来，就会自然而然地推导出上面的公式。
 
 书上的这个公式我觉得是有些问题的，它的一些向量的维数没有说得很清楚，比如$\frac{\partial L}{\partial Y}$一下是 (3, )，一下又是 (1, 3)。这里我明确一下，假设$X$的维数是 (1, 2)，1表示一个样本，2表示变量的个数，$W$是(2, 3)，$B$是(1, 3)，那么$Y$就是(1, 3)，那么此时对应的导数公式应该是：
+
+
 $$
 \begin{align}
 \frac{\partial L}{\partial X}(1, 2) = \frac{\partial L}{\partial Y}(1, 3) \cdot W^T(3, 2)\\
 \frac{\partial L}{\partial W}(2, 3) = X^T(2, 1) \cdot \frac{\partial L}{\partial Y}(1, 3) 
 \end{align}
 $$
+
+
 **批版本的Affine层**
 
 与刚刚不同，现在输入$X$的形状是 (N, 2)。之后就和前面一样导出$\frac{\partial L}{\partial X}$和$\frac{\partial L}{\partial W}$，但是对于偏置$B$，需要特别注意，正向传播时，偏置会被加到每一个数据上。因此，反向传播时，各数据的反向传播值需要汇总为偏置的元素。所以，需要用`np.sum`对第0轴（以数据为单位的轴）方向上的元素进行求和。
 
-![42](figs\42.png)
+![42](https://img.imgdb.cn/item/6031c6395f4313ce25eb6879.png)
 
 ```python
 class Affine:
@@ -338,15 +394,15 @@ class Affine:
 
 ### Softmax-with-Loss层实现
 
-![43](figs\43.png)
+![43](https://img.imgdb.cn/item/6031c6395f4313ce25eb687b.png)
 
 Softmax层将输入值正规化（和调整为1）之后再输出。下面来实现softmax层，因为已经到输出层，所以一并把计算loss的过程也包括进去，统称为“Softmax-with-Loss”层。
 
-![44](figs\44.png)
+![44](https://img.imgdb.cn/item/6031c6395f4313ce25eb687e.png)
 
 这应该是全书看上去最复杂的一个图，它还有一个简易版的图，如下，
 
-![45](figs\45.png)
+![45](https://img.imgdb.cn/item/6031c6395f4313ce25eb6882.png)
 
 全书唯一的附录也是为了推导最后反向传播的及其”漂亮“的结果($y_1-t_1, y_2-t_2, y_3-t_3$)。$y$是softmax的输出，$t$是数据标签。我也会把推导放在最后。这里需要说明一下的是，这样“漂亮”的结果并不是偶然，而是为了得到这样的结果，在输出层使用softmax函数后，特意设计了交叉熵误差函数（这就说得很牛了）。回归问题中输出层使用“恒等函数”，损失函数使用“平方和误差”也同样的理由。不过我持保留意见。
 
@@ -359,11 +415,13 @@ class SoftmaxWithLoss:
     def __init__(self):
         self.loss = None
         self.y = None # softmax输出
+        
         self.t = None # 标签
 
     def forward(self, x, t):
         self.t = t
         self.y = softmax(x)   # 之前已经定义过了
+        
         self.loss = cross_entropy_error(self.y, self.t)  # 之前已经定义过了
         
         return self.loss
@@ -371,8 +429,10 @@ class SoftmaxWithLoss:
     def backward(self, dout=1):
         batch_size = self.t.shape[0]
         if self.t.size == self.y.size: # one-hot coding 
+            
             dx = (self.y - self.t) / batch_size
         else:   # non one-hot coding
+            
             dx = self.y.copy()
             dx[np.arange(batch_size), self.t] -= 1
             dx = dx / batch_size
@@ -386,18 +446,18 @@ class SoftmaxWithLoss:
 
 | 变量                                                    | 说明                                                         |
 | ------------------------------------------------------- | ------------------------------------------------------------ |
-| params                                                  | 保存神经网络的参数的字典型变量（实例变量）。<br />params['W1'] 是第 1 层的权重，params['b1'] 是第 1 层的偏置。<br />params['W2'] 是第 2 层的权重，params['b2'] 是第 2 层的偏置。 |
-| layers                                                  | 保存神经网络的层的**有序字典变量**<br />以layers['Affine1']、layers['Relu1']、layers['Affine2']的形式，通过有序字典保存各层 |
-| lastLayer                                               | 神经网络的最后一层。本例中为SoftmaxWithLoss层                |
+| `params`                                                | 保存神经网络的参数的字典型变量（实例变量）。<br />params['W1'] 是第 1 层的权重，params['b1'] 是第 1 层的偏置。<br />params['W2'] 是第 2 层的权重，params['b2'] 是第 2 层的偏置。 |
+| `layers`                                                | 保存神经网络的层的**有序字典变量**<br />以layers['Affine1']、layers['Relu1']、layers['Affine2']的形式，通过有序字典保存各层 |
+| `lastLayer`                                             | 神经网络的最后一层。本例中为SoftmaxWithLoss层                |
 |                                                         |                                                              |
 |                                                         |                                                              |
 | **方法**                                                | **说明**                                                     |
 | `__init__ `(self, input_size, hidden_size, output_size) | 进行初始化。<br />参数从头开始依次表示输入层的神经元数、隐藏层的神经元数、输出层的神经元数 |
-| predict(self, x)                                        | 进行识别 (推理)。<br />参数 x 是图像数据                     |
-| loss(self, x, t)                                        | 计算损失函数的值。<br />参数 x 是图像数据，t 是正确解标签（后面 3 个方法的参数也一样） |
-| accuracy(self, x, t)                                    | 计算识别精度                                                 |
-| numerical_gradient(self, x, t)                          | 通过数值微分计算关于权重参数的梯度（同上一篇一样）           |
-| gradient(self, x, t)                                    | 通过误差反向传播法计算关于权重参数的梯度                     |
+| `predict`(self, x)                                      | 进行识别 (推理)。<br />参数 x 是图像数据                     |
+| `loss`(self, x, t)                                      | 计算损失函数的值。<br />参数 x 是图像数据，t 是正确解标签（后面 3 个方法的参数也一样） |
+| `accuracy`(self, x, t)                                  | 计算识别精度                                                 |
+| `numerical_gradient`(self, x, t)                        | 通过数值微分计算关于权重参数的梯度（同上一篇一样）           |
+| `gradient`(self, x, t)                                  | 通过误差反向传播法计算关于权重参数的梯度                     |
 
 ```python
 from collections import OrderedDict
@@ -405,6 +465,7 @@ from collections import OrderedDict
 class TwoLayerNet(object):
     def __init__(self, input_size, hidden_size, output_size, weight_init_std=0.01):
         # 初始化权重
+        
         self.params = {}
         self.params['W1'] = weight_init_std * np.random.randn(input_size, hidden_size)
         self.params['b1'] = np.zeros(hidden_size)
@@ -412,6 +473,7 @@ class TwoLayerNet(object):
         self.params['b2'] = np.zeros(output_size)
         
         # 生成层
+        
         self.layers = OrderedDict()
         self.layers['Affine1'] = Affine(self.params['W1'], self.params['b1'])
         self.layers['Relu1'] = Relu()
@@ -425,6 +487,7 @@ class TwoLayerNet(object):
         return x
     
     # x: 输入数据，t: 标签
+    
     def loss(self, x, t):
         y = self.predict(x)
         return self.lastLayer(y, t)
@@ -450,9 +513,11 @@ class TwoLayerNet(object):
     
     def gradient(self, x, t):
         # forward
+        
         self.loss(x, t)
         
         # backward
+        
         dout = 1
         dout = self.lastLayer.backward(dout)
         
@@ -461,7 +526,7 @@ class TwoLayerNet(object):
         for layer in layers:
             dout = layer.backward(dout)
             
-        # 设定
+        
         grads = {}
         grads['W1'] = self.layers['Affine1'].dW
         grads['b1'] = self.layers['Affine1'].db
@@ -486,10 +551,12 @@ class TwoLayerNet(object):
 
 ```python
 # 生成数据
+
 x = np.random.randn(3, 784)
 t = np.random.randint(0, 10, (3, ))
 
 # 创建网络
+
 network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
 
 grad_numerical = network.numerical_gradient(x, t)
@@ -502,8 +569,11 @@ for key in grad_numerical.keys():
     
     
 # W1:2.5925165667177406e-09
+
 # b1:2.845791808914243e-09
+
 # W2:1.9350786973215555e-08
+
 # b2:1.4160759305298364e-07
 ```
 
@@ -511,388 +581,15 @@ for key in grad_numerical.keys():
 
 最后在放一张使用本篇构造的网络训练MNIST的结果，代码和上篇几乎一样，只需要把`grad = network.numerical_gradient(x_batch, t_batch)`换成`grad = network.gradient(x_batch, t_batch)`就行了。
 
-![46](figs\46.png)
+![46](https://img.imgdb.cn/item/6031c6745f4313ce25eb8568.png)
 
 ## Softmax-with-Loss层的计算图
 
-![47](figs\47.png)
+![47](https://img.imgdb.cn/item/6031c6745f4313ce25eb856a.png)
 
 ## 代码汇总
 
-```python
-# -*- coding: utf-8 -*-
-
-import numpy as np
-from collections import OrderedDict
-import matplotlib.pyplot as plt
-from mnist import load_mnist     # 在上一篇文章里有放
-
-class MulLayer(object):
-    def __init__(self):
-        self.x = None
-        self.y = None
-        
-    def forward(self, x, y):
-        self.x = x
-        self.y = y
-        out = x * y
-        
-        return out
-    
-    def backward(self, dout):
-        dx = dout * self.y  # 翻转x和y
-        dy = dout * self.x
-        
-        return dx, dy
-
-    
-class AddLayer:
-    def __init__(self):
-        pass
-
-    def forward(self, x, y):
-        out = x + y
-
-        return out
-
-    def backward(self, dout):
-        dx = dout * 1
-        dy = dout * 1
-
-        return dx, dy
-
-
-
-# ================================================================================================
-apple = 100
-apple_num = 2
-tax = 1.1
-
-mul_apple_layer = MulLayer()
-mul_tax_layer = MulLayer()
-
-# forward
-apple_price = mul_apple_layer.forward(apple, apple_num)
-price = mul_tax_layer.forward(apple_price, tax)
-
-# backward
-dprice = 1
-dapple_price, dtax = mul_tax_layer.backward(dprice)
-dapple, dapple_num = mul_apple_layer.backward(dapple_price)
-
-print("price:", int(price))
-print("dApple:", dapple)
-print("dApple_num:", int(dapple_num))
-print("dTax:", dtax)
-
-# -------------------------------------------------------------------------------------------------
-apple = 100
-apple_num = 2
-orange = 150
-orange_num = 3
-tax = 1.1
-
-# layer
-mul_apple_layer = MulLayer()
-mul_orange_layer = MulLayer()
-add_apple_orange_layer = AddLayer()
-mul_tax_layer = MulLayer()
-
-# forward
-apple_price = mul_apple_layer.forward(apple, apple_num)  # (1)
-orange_price = mul_orange_layer.forward(orange, orange_num)  # (2)
-all_price = add_apple_orange_layer.forward(apple_price, orange_price)  # (3)
-price = mul_tax_layer.forward(all_price, tax)  # (4)
-
-# backward
-dprice = 1
-dall_price, dtax = mul_tax_layer.backward(dprice)  # (4)
-dapple_price, dorange_price = add_apple_orange_layer.backward(dall_price)  # (3)
-dorange, dorange_num = mul_orange_layer.backward(dorange_price)  # (2)
-dapple, dapple_num = mul_apple_layer.backward(dapple_price)  # (1)
-
-print("price:", int(price))             # 715
-print("dApple:", dapple)                # 110
-print("dApple_num:", int(dapple_num))   # 2.2
-print("dOrange:", dorange)              # 3.3
-print("dOrange_num:", int(dorange_num)) # 165
-print("dTax:", dtax)                    # 650
-# ================================================================================================
-
-def softmax(x):
-    if x.ndim == 2:  #[batch_size, p]
-        x = x - np.max(x, axis=1, keepdims=True)
-        y = np.exp(x) / np.sum(np.exp(x), axis=1, keepdims=True)
-        return y
-
-    x = x - np.max(x) 
-    return np.exp(x) / np.sum(np.exp(x))
-
-
-def cross_entropy_error(y, t):
-    if y.ndim == 1:
-        t = t.reshape(1, t.size)
-        y = y.reshape(1, y.size)
-        
-    # 将one-hot coding转化成单个coding
-    if t.size == y.size:
-        t = t.argmax(axis=1)
-             
-    batch_size = y.shape[0]
-    return -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size
-
-
-class Relu(object):
-    def __init__(self):
-        self.mask = None
-        
-    def forward(self, x):
-        self.mask = (x < 0)
-        out = x.copy()
-        out[self.mask] = 0
-        return out
-    
-    def backward(self, dout):
-        dout[self.mask] = 0
-        dx = dout
-        return dx
-
-
-class Sigmoid(object):
-    def __init__(self):
-        self.out = None
-        
-    def forward(self, x):
-        out = 1 / (1 + np.exp(-x))
-        self.out = out
-        return out
-    
-    def backward(self, dout):
-        dx = dout * self.out * (1.0 - self.out)
-        return dx
-
-
-class Affine:
-    def __init__(self, W, b):
-        self.W = W
-        self.b = b
-        
-        self.x = None
-       
-        self.dW = None
-        self.db = None
-
-    def forward(self, x):
-        self.x = x
-        out = np.dot(x, self.W) + self.b
-
-        return out
-
-    def backward(self, dout):
-        dx = np.dot(dout, self.W.T)
-        self.dW = np.dot(self.x.T, dout)
-        self.db = np.sum(dout, axis=0)
-        
-        return dx
-
-
-class SoftmaxWithLoss:
-    def __init__(self):
-        self.loss = None
-        self.y = None # softmax输出
-        self.t = None # 标签
-
-    def forward(self, x, t):
-        self.t = t
-        self.y = softmax(x)   # 之前已经定义过了
-        self.loss = cross_entropy_error(self.y, self.t)  # 之前已经定义过了
-        
-        return self.loss
-
-    def backward(self, dout=1):
-        batch_size = self.t.shape[0]
-        if self.t.size == self.y.size: # one-hot coding 
-            dx = (self.y - self.t) / batch_size
-        else:   # non one-hot coding
-            dx = self.y.copy()
-            dx[np.arange(batch_size), self.t] -= 1
-            dx = dx / batch_size
-        
-        return dx
-
-
-
-def _numerical_gradient_no_batch(f, x):
-    h = 1e-4  # 0.0001
-    grad = np.zeros_like(x)
-    
-    for idx in range(x.size):
-        tmp_val = x[idx]
-        x[idx] = float(tmp_val) + h
-        fxh1 = f(x)  # f(x+h)
-        
-        x[idx] = tmp_val - h 
-        fxh2 = f(x)  # f(x-h)
-        grad[idx] = (fxh1 - fxh2) / (2*h)
-        
-        x[idx] = tmp_val  # 値を元に戻す
-        
-    return grad
-
-
-def numerical_gradient(f, X):
-    if X.ndim == 1:
-        return _numerical_gradient_no_batch(f, X)
-    else:
-        grad = np.zeros_like(X)
-        
-        for idx, x in enumerate(X):
-            grad[idx] = _numerical_gradient_no_batch(f, x)
-        
-        return grad
-
-
-
-class TwoLayerNet(object):
-    def __init__(self, input_size, hidden_size, output_size, weight_init_std=0.01):
-        # 初始化权重
-        self.params = {}
-        self.params['W1'] = weight_init_std * np.random.randn(input_size, hidden_size)
-        self.params['b1'] = np.zeros(hidden_size)
-        self.params['W2'] = weight_init_std * np.random.randn(hidden_size, output_size) 
-        self.params['b2'] = np.zeros(output_size)
-        
-        # 生成层
-        self.layers = OrderedDict()
-        self.layers['Affine1'] = Affine(self.params['W1'], self.params['b1'])
-        self.layers['Relu1'] = Relu()
-        self.layers['Affine2'] = Affine(self.params['W2'], self.params['b2'])
-        
-        self.lastLayer = SoftmaxWithLoss()
-        
-    def predict(self, x):
-        for layer in self.layers.values():
-            x = layer.forward(x)
-        return x
-    
-    # x: 输入数据，t: 标签
-    def loss(self, x, t):
-        y = self.predict(x)
-        return self.lastLayer.forward(y, t)
-    
-    def accuracy(self, x, t):
-        y = self.predict(x)
-        y = np.argmax(y, axis=1)
-        if t.ndim != 1:
-            t = np.argmax(t, axis=1)
-        accuracy = np.sum(y == t) / float(x.shape[0])
-        return accuracy
-    
-    def numerical_gradient(self, x, t):
-        loss_W = lambda W: self.loss(x, t)
-        
-        grads = {}
-        grads['W1'] = numerical_gradient(loss_W, self.params['W1'])
-        grads['b1'] = numerical_gradient(loss_W, self.params['b1'])
-        grads['W2'] = numerical_gradient(loss_W, self.params['W2'])
-        grads['b2'] = numerical_gradient(loss_W, self.params['b2'])
-        
-        return grads
-    
-    def gradient(self, x, t):
-        # forward
-        self.loss(x, t)
-        
-        # backward
-        dout = 1
-        dout = self.lastLayer.backward(dout)
-        
-        layers = list(self.layers.values())
-        layers.reverse()
-        for layer in layers:
-            dout = layer.backward(dout)
-            
-        # 设定
-        grads = {}
-        grads['W1'] = self.layers['Affine1'].dW
-        grads['b1'] = self.layers['Affine1'].db
-        grads['W2'] = self.layers['Affine2'].dW
-        grads['b2'] = self.layers['Affine2'].db
-        
-        return grads
-
-
-# =============================================Gradient Checking ===============================
-
-# 生成数据
-x = np.random.randn(3, 784)
-t = np.random.randint(0, 10, (3, ))
-
-# 创建网络
-network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
-
-grad_numerical = network.numerical_gradient(x, t)
-grad_backprop = network.gradient(x, t)
-
-for key in grad_numerical.keys():
-    diff = np.average(np.abs(grad_backprop[key] - grad_numerical[key]))
-    print(key + ':' + str(diff))
-
-
-
-# ===============================Training on MNIST==========================================
-(x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
-
-# 超参数的设定
-iters_num = 10000  
-train_size = x_train.shape[0]
-batch_size = 100
-learning_rate = 0.1
-
-
-train_loss_list = []
-train_acc_list = []
-test_acc_list = []
-# 平均每个epoch的重复次数
-iter_per_epoch = max(train_size / batch_size, 1)
-
-network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
-
-for i in range(iters_num):
-    # 获取mini-batch
-    batch_mask = np.random.choice(train_size, batch_size)
-    x_batch = x_train[batch_mask]
-    t_batch = t_train[batch_mask]
-    
-    # 计算梯度
-    grad = network.gradient(x_batch, t_batch)
-    
-    # 更新参数
-    for key in ('W1', 'b1', 'W2', 'b2'):
-        network.params[key] -= learning_rate * grad[key]
-        
-    loss = network.loss(x_batch, t_batch)
-    train_loss_list.append(loss)
-    
-    # 计算每个epoch的识别精度
-    if i % iter_per_epoch == 0:
-        train_acc = network.accuracy(x_train, t_train)
-        test_acc = network.accuracy(x_test, t_test)
-        train_acc_list.append(train_acc)
-        test_acc_list.append(test_acc)
-        print("train acc, test acc | " + str(train_acc) + ", " + str(test_acc))
-        
-
-
-x = np.arange(len(train_acc_list))
-plt.plot(x, train_acc_list, label='train acc')
-plt.plot(x, test_acc_list, label='test acc', linestyle='--')
-plt.xlabel("epochs")
-plt.ylabel("accuracy")
-plt.ylim(0, 1.0)
-plt.legend(loc='lower right')
-plt.show()
-```
+[Deep_Learning_from_scratch_3](https://github.com/leyuanheart/Deep_Learning_From_Scratch/tree/main/3)
 
 ---
 
