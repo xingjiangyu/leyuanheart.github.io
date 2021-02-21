@@ -1,6 +1,16 @@
-# Deep learning from scratch 2
+---
+layout:     post
+title:      Deep learning from scratch 2
+subtitle:   Perceptron and Neural Network
+date:       2021-02-14
+author:     Le Yuan
+header-img: img/wolf.jpg
+catalog: true
+tags:
+    - Deep Learning
+---
 
-<img src="figs\封面.jpeg" alt="fengmian" style="zoom:50%;" />
+<img src="https://img.imgdb.cn/item/60311e2d5f4313ce25b859d6.jpg" alt="fengmian" style="zoom:50%;" />
 
 ## 神经网络的学习
 
@@ -8,7 +18,7 @@
 
 ### 从数据中学习
 
-![21](figs\21.png)
+![21](https://img.imgdb.cn/item/6031c16b5f4313ce25e9a721.png)
 
 深度学习有时也成为了端到端机器学习（end-to-end machine learning），也就是从原始数据中获得目标结果的过程，中间不需要人为的介入。
 
@@ -25,9 +35,13 @@
 ##### 均方误差（mean square error）
 
 可以用作损失函数的函数有很多，其中最有名的是**均方误差**（mean square error）：
+
+
 $$
 E=\frac{1}{2}\sum_{k=1}^K(y_k-t_k)^2
 $$
+
+
 这里$y_k$表示神经网络的输出，$t_k$表示训练数据的标签（one-hot表示），$k$表示数据的维数。比如在手写数字（0到9）的例子中， $y_k$、$t_k$是由如下10个元素构成的数据。
 
 `y=[0.1, 0.05, 0.6, 0.0, 0.05, 0.1, 0.0, 0.1, 0.0, 0.0]`
@@ -44,9 +58,13 @@ def mean_square_error(y, t):
 ##### 交叉熵误差（cross entropy error）
 
 除了均方误差外，**交叉熵误差**（cross entropy error）也经常被用作损失函数：
+
+
 $$
 E=-\sum_{k=1}^Kt_k\log y_k
 $$
+
+
 由于$t_k$是one-hot表示，只有正确解标签的索引为1，其他均为0。所以，实际上上式只计算对应正确解标签的输出的自然对数。比如，假设正确解标签的索引是“2”，与之对应的神经网络输出是0.6，则交叉熵误差是$-\log 0.6=0.51$，如果“2”对应的输出为0.1，则误差为$\log 0.1=2.3$。也就是说，**交叉熵误差的值是由正确解标签所对应的输出结果决定的**。
 
 ```python
@@ -105,6 +123,8 @@ def cross_entropy_error(y, t):
 这一部分书中是从导数、偏导数、梯度的定义开始介绍的，我这里就是重点关注一下Implementation。对于复杂的函数，无法通过推导数学公式获得解析解（analytic solution），转而需要利用微小的差分来求导数，这个过程就叫做**数值微分**（numerical differentiation）。
 
 我们根据导数的定义来做数值微分：
+
+
 $$
 \frac{df(x)}{dx}=\lim_{h\to0}\frac{f(x+h)-f(x)}{h}
 $$
@@ -126,11 +146,12 @@ def numerical_diff(f, x):
 
 第二个需要改进的地方与函数的差分有关。虽然上述实现中计算了f在x+h和x之间的差分（前向差分），但是，这个计算从一开始就有误差。这个差异出现的原因是h不可能无限接近于0。为了减少这个误差，我们可以计算f在x+h和x-h之间的差分（中心差分）。
 
-![22](figs\22.png)
+![22](https://img.imgdb.cn/item/6031c16b5f4313ce25e9a724.png)
 
 ```python
 def numerical_diff(f, x):
     h = 1e-4 # 0.0001
+    
     return (f(x+h) - f(x-h)) / (2*h)
 ```
 
@@ -144,10 +165,12 @@ def _numerical_gradient_no_batch(f, x):
     for idx in range(x.size):
         tmp_val = x[idx]
         # f(x+h)
+        
         x[idx] = tmp_val + h
         fxh1 = f(x)
         
         # f(x-h)
+        
         x[idx] = tmp_val - h
         fxh2 = f(x)
         
@@ -172,6 +195,7 @@ def numerical_gradient(f, X):
 '''
 上面的numerical_gradient()最多只能处理X是矩阵（2维数组）的情况，如果X是多维数组的话，
 比如在CNN中卷积层的W一般是(filter_num, img_channel, height, width)，这个时候就要用到Numpy中的数组迭代器np.nditer()，这个可以迭代多维数组，之后就统一用下面的函数了
+
 '''
 def numerical_gradient(f, x):
     '''
@@ -179,6 +203,7 @@ def numerical_gradient(f, x):
     https://blog.csdn.net/m0_37393514/article/details/79563776
     '''
     h = 1e-4 # 0.0001
+    
     grad = np.zeros_like(x)
     
     it = np.nditer(x, flags=['multi_index'], op_flags=['readwrite'])
@@ -190,6 +215,7 @@ def numerical_gradient(f, x):
         
         x[idx] = tmp_val - h 
         fxh2 = f(x) # f(x-h)
+        
         grad[idx] = (fxh1 - fxh2) / (2*h)
         
         x[idx] = tmp_val 
@@ -230,13 +256,15 @@ plt.draw()
 plt.show()
 ```
 
-![23](figs\23.png)
+![23](https://img.imgdb.cn/item/6031c16b5f4313ce25e9a728.png)
 
 可以看到，上图中箭头的方向就是负梯度的方向，可以看出，这些方向都指向$f(x_0,x_1)$的“最低处”（最小值），其次我们发现离“最低处”越远，箭头越大。虽然上图中的方向指向了最小值，但并非任何时候都是这样。实际上，负梯度会指向**各点处**的函数值降低的方向。更严格地讲，是各点处函数值减小最多的方向（高等数学告诉我们，方向导数=$\cos \theta \times$梯度（$\theta$是方向导数的方向与梯度方向的夹角）， 因此，在所有下降方向中，负梯度方向下降的最多）。
 
 #### 神经网络的梯度
 
 神经网络的学习也要求梯度。这里所说的梯度是指损失函数关于权重参数的梯度。比如，有一个形状为 $2 \times 3$ 的权重 $W$ 的神经网络，损失函数用 $L$ 表示。此时，梯 度可以用 $\frac{\partial L}{\partial W}$ 表示。用数学式表示的话，如下所示。
+
+
 $$
 \begin{array}{c}
 
@@ -258,6 +286,8 @@ w_{21} & w_{22} & w_{23}
 
 \end{array}
 $$
+
+
 $\frac{\partial L}{\partial W}$ 的元素由各个元素关于 $W$ 的偏导数构成。比如，第 1 行第 1 列的元素 $\frac{\partial L}{\partial w_{11}}$ 表示当 $w_{11}$ 稍微变化时，损失函数 $L$ 会发生多大变化。这里的重点是，$\frac{\partial L}{\partial W}$ 的形状和 $W$ 相同。
 
 下面，我们以一个简单的神经网络为例，来实现求梯度的代码。为此，我们要实现一个名为 SimpleNet 的类。
@@ -265,6 +295,7 @@ $\frac{\partial L}{\partial W}$ 的元素由各个元素关于 $W$ 的偏导数�
 ```python
 def softmax(x):
     if x.ndim == 2:  #[batch_size, p]
+        
         x = x - np.max(x, axis=1)
         y = np.exp(x) / np.sum(np.exp(x), axis=1)
         return y
@@ -278,6 +309,7 @@ def cross_entropy(y, t):
         y = y.reshape(1, y.size)
         
     # 将one-hot coding转化成单个coding
+    
     if t.size == y.size:
         t = t.argmax(axis=1)
              
@@ -289,6 +321,7 @@ class SimpleNet(object):
         self.W = np.random.randn(2, 3) # 用高斯分布对权重进行初始化
         
     def predict(self, x):    # x是p=2的向量，也可以是一个batch的数据，[batch_size, 2]
+        
         return np.dot(x, self.W)
     
     def loss(self, x, t):
@@ -301,11 +334,11 @@ class SimpleNet(object):
 
 SimpleNet 类只有 个实例变量，即形状为 $2 \times 3$ 的权重参数。它有两个方法，一个是用于预测的 $\operatorname{predict}(x),$ 另一个是用于求损失函数值的 loss $(x, t)$ 。这里参数 $x$ 接收输入数据，t 接收正确解标签。现在我们来试着用一下这个 SimpleNet。
 
-![25](figs\25.png)
+![25](https://img.imgdb.cn/item/6031c16b5f4313ce25e9a731.png)
 
 接下来求梯度。和前面一样，我们使用 numerical_gradient $(f, x)$ 求梯度（这里定义的函数 $f($ W $)$ 的参数 $W$ 是一个伪参数。 因为 numerical_gradient $(f, x)$ 会在内部执行 $f(x)$, 为了与之兼容而定义了 $f(W)$  ) 。
 
-![26](figs\26.png)
+![26](https://img.imgdb.cn/item/6031c1d35f4313ce25e9cf00.png)
 
 numerical_gradient $(f, x)$ 的参数 $f$ 是函数, $x$ 是传给函数 $f$ 的参数。 因此，这 里参数 $x$ 取 net. W，并定义一个计算损失函数的新函数 $f,$ 然后把这个新定义的函数传递给 numerical_gradient $(f, x)$ 。
 
@@ -322,6 +355,8 @@ numerical_gradient $(f, x)$ 的参数 $f$ 是函数, $x$ 是传给函数 $f$ 的
 此时梯度法就派上用场了。在梯度法中，函数的取值从当前位置沿着梯度方向前进一定距离，然后在新的地方重新求梯度，再沿着新梯度方向前进，如此反复，不断地沿梯度方向前进。像这样，通过不断地沿梯度方向前进，逐渐减小函数值的过程就是**梯度法** (gradient method) 。
 
 现在，我们尝试用数学式来表示梯度法。
+
+
 $$
 \begin{array}{l}
 
@@ -331,6 +366,7 @@ x_{1}=x_{1}-\eta \frac{\partial f}{\partial x_{1}}
 
 \end{array}
 $$
+
 
 
 上式的 $\eta$ 表示更新量，在神经网络的学习中，称为**学习率**（learning rate）。学 习率决定在一次学习中，应该学习多少，以及在多大程度上更新参数。
@@ -347,6 +383,7 @@ def gradient_descent(f, init_x, lr=0.01, step_num=100):
     
     for i in range(step_num):
         grad = numerical_gradient(f, x) # 之前已经定义过了
+        
         x -= lr * grad
         
     return x
@@ -391,19 +428,21 @@ plt.figure(figsize=(8, 8))
 c = plt.contour(X0, X1, Y, levels=[5, 10, 15], linestyles='--')
 plt.clabel(c, fontsize=10, colors='k', fmt='%.1f')
 # plt.plot( [-5, 5], [0,0], '--b')
+
 # plt.plot( [0,0], [-5, 5], '--b')
+
 plt.plot(x_history[:,0], x_history[:,1], 'o')
 
 # plt.xlim(-6, 6)
+
 # plt.ylim(-6, 6)
+
 plt.xlabel("X0")
 plt.ylabel("X1")
 plt.show()
 ```
 
-![24](figs\24.png)
-
-
+![24](https://img.imgdb.cn/item/6031c16b5f4313ce25e9a72c.png)
 
 #### 学习算法的实现
 
@@ -429,9 +468,9 @@ plt.show()
 
 重复步骤 1、步骤 2、步骤 3。
 
-神经网络的学习按照上面 4 个步骤 进行。这个方法通过梯度下降法更新参数，不过因 为这里使用的数据是随机选择的mini batch 数据，所以又称为**随机梯度下降法**（stochastic gradient descent）。“随机”指的是“随机选择的”的意思，因此，随机梯度下降法是“对随机选择的数据进行的梯度下降法”。深度学习的很多框架中，随机梯度下降法一般由一个名为 **SGD **的函数来实现。
+神经网络的学习按照上面 4 个步骤 进行。这个方法通过梯度下降法更新参数，不过因 为这里使用的数据是随机选择的mini batch 数据，所以又称为**随机梯度下降法**（stochastic gradient descent）。“随机”指的是“随机选择的”的意思，因此，随机梯度下降法是“对随机选择的数据进行的梯度下降法”。深度学习的很多框架中，随机梯度下降法一般由一个名为 `SGD` 的函数来实现。
 
-下面，我们来实现手写数字识别的神经网络。这里以 2 层神经网络（隐藏层为 1 层的 网络）为对象，使用 MNIST 数据集进行学习。
+下面，我们来实现手写数字识别的神经网络。这里以 2 层神经网络（隐藏层为 1 层的网络）为对象，使用 MNIST 数据集进行学习。
 
 ##### 2层神经网络的类
 
@@ -441,6 +480,7 @@ plt.show()
 class TwoLayerNet(object):
     def __init__(self, input_size, hidden_size, output_size, weight_init_std=0.1):
         # 初始化权重
+        
         self.params = {}
         self.params['W1'] = weight_init_std * np.random.randn(input_size, hidden_size)
         self.params['b1'] = np.zeros(hidden_size)
@@ -458,6 +498,7 @@ class TwoLayerNet(object):
         return y
     
     # x:输入数据，t: label
+    
     def loss(self, x, t):
         y = self.predict(x)
         
@@ -485,33 +526,33 @@ class TwoLayerNet(object):
 
 | 变量                                                    | 说明                                                         |
 | ------------------------------------------------------- | ------------------------------------------------------------ |
-| params                                                  | 保存神经网络的参数的字典型变量（实例变量）。<br />params['W1'] 是第 1 层的权重，params['b1'] 是第 1 层的偏置。<br />params['W2'] 是第 2 层的权重，params['b2'] 是第 2 层的偏置。 |
-| grads                                                   | 保存梯度的字典型变量 (numerical_gradient() 方法的返回值）。<br />grads ['W1'] 是第 1 层权重的梯度，grads['b1'] 是第 1 层偏置的梯度。<br />grads ['W2'] 是第 2 层权重的梯度，grads['b2'] 是第 2 层偏置的梯度。 |
+| `params`                                                | 保存神经网络的参数的字典型变量（实例变量）。<br />params['W1'] 是第 1 层的权重，params['b1'] 是第 1 层的偏置。<br />params['W2'] 是第 2 层的权重，params['b2'] 是第 2 层的偏置。 |
+| `grads`                                                 | 保存梯度的字典型变量 (numerical_gradient() 方法的返回值）。<br />grads ['W1'] 是第 1 层权重的梯度，grads['b1'] 是第 1 层偏置的梯度。<br />grads ['W2'] 是第 2 层权重的梯度，grads['b2'] 是第 2 层偏置的梯度。 |
 |                                                         |                                                              |
 | **方法**                                                | **说明**                                                     |
 | `__init__ `(self, input_size, hidden_size, output_size) | 进行初始化。<br />参数从头开始依次表示输入层的神经元数、隐藏层的神经元数、输出层的神经元数 |
-| predict(self, x)                                        | 进行识别 (推理)。<br />参数 x 是图像数据                     |
-| loss(self, x, t)                                        | 计算损失函数的值。<br />参数 x 是图像数据，t 是正确解标签（后面 3 个方法的参数也一样） |
-| accuracy(self, x, t)                                    | 计算识别精度                                                 |
-| numerical_gradient(self, x, t)                          | 计算权重参数的梯度                                           |
+| `predict`(self, x)                                      | 进行识别 (推理)。<br />参数 x 是图像数据                     |
+| `loss`(self, x, t)                                      | 计算损失函数的值。<br />参数 x 是图像数据，t 是正确解标签（后面 3 个方法的参数也一样） |
+| `accuracy`(self, x, t)                                  | 计算识别精度                                                 |
+| `numerical_gradient`(self, x, t)                        | 计算权重参数的梯度                                           |
 
 TwoLayerNet 类有 params 和 grads 两个字典型实例变量。params 变量中保存了权 重参数, 比如 params ['W1'] 以 NumPy 数组的形式保存了第 1 层的权重参数。此外，第 1 层的偏置可以通过 param['b1'] 进行访问。这里来看一个例子。
 
-![27](figs\27.png)
+![27](https://img.imgdb.cn/item/6031c1d35f4313ce25e9cf03.png)
 
 如上所示，params 变量中保存了该神经网络所需的全部参数。并且, params 变量 中保存的权重参数会用在推理处理（前向处理）中。顺便说一下，推理处理的实现如下所示。
 
-![28](figs\28.png)
+![28](https://img.imgdb.cn/item/6031c1d35f4313ce25e9cf08.png)
 
 此外，与 params 变量对应，grads 变量中保存了各个参数的梯度。如下所示，使用 numerical_gradient ( ) 方法计算梯度后，梯度的信息将保存在 grads 变量中。
 
-![29](figs\29.png)
+![29](https://img.imgdb.cn/item/6031c1d35f4313ce25e9cf0e.png)
 
-接着，我们来看一下 TwoLayerNet 的方法的实现。首先是 $_{\text {init }}$ (self, input_size, hidden_size, output_size) 方法，它是类的初始化方法（所谓初始化 方法，就是生成 TwoLayerNet 实例时被调用的方法）。从第 1 个参数开始，依次表示输入层的神经元数、隐藏层的神经元数、输出层的神经元数。另外，因为进行手写数字识别时，输入图像的大小是 $784(28 \times 28)$ ，输出为 10 个类别，所以指定参数input_size=784、output_size=10, 将隐藏层的个数 hidden_size 设置为一个合适的值即可。
+接着，我们来看一下 TwoLayerNet 的方法的实现。首先是 `__init__` ​(self, input_size, hidden_size, output_size) 方法，它是类的初始化方法（所谓初始化 方法，就是生成 TwoLayerNet 实例时被调用的方法）。从第 1 个参数开始，依次表示输入层的神经元数、隐藏层的神经元数、输出层的神经元数。另外，因为进行手写数字识别时，输入图像的大小是 $784(28 \times 28)$ ，输出为 10 个类别，所以指定参数input_size=784、output_size=10, 将隐藏层的个数 hidden_size 设置为一个合适的值即可。
 
-此外，这个初始化方法会对权重参数进行初始化。**如何设置权重参数的初始值这个问 题是关系到神经网络能否成功学习的重要问题**。后面我们会详细讨论权重参数的初始化， 这里只需要知道，权重使用符合高斯分布的随机数进行初始化，偏置使用 0 进行初始 化。 predict (self, x)​ 和 accuracy(self, x, t)​ 的实现和上一章的神经网络的推理处理基本一样。另外, loss(self, x, t)​ 是计算损失函数值的方法。这个方法会基于 predict() 的结果和正确解标签，计算交叉熵误差。
+此外，这个初始化方法会对权重参数进行初始化。**如何设置权重参数的初始值这个问 题是关系到神经网络能否成功学习的重要问题**。后面我们会详细讨论权重参数的初始化， 这里只需要知道，权重使用符合高斯分布的随机数进行初始化，偏置使用 0 进行初始化。 `predict` (self, x)​ 和 `accuracy`(self, x, t)​ 的实现和上一章的神经网络的推理处理基本一样。另外, `loss`(self, x, t)​ 是计算损失函数值的方法。这个方法会基于 `predict`() 的结果和正确解标签，计算交叉熵误差。
 
-剩下的 numerical_gradient (self,  x, t)​ 方法会计算各个参数的梯度。根据数值微分，计算各个参数相对于损失函数的梯度。
+剩下的 `numerical_gradient` (self,  x, t)​ 方法会计算各个参数的梯度。根据数值微分，计算各个参数相对于损失函数的梯度。
 
 > 之后，我们会介绍一个高速计算梯度的方法，称为**误差反向传播法**。用误差反向传播法求到的梯度和数值微分的结果基本一致，但可以高速地进行处理。
 
@@ -522,10 +563,12 @@ TwoLayerNet 类有 params 和 grads 两个字典型实例变量。params 变量�
 之前提到过，神经网络学习的目标就是要掌握泛化能力。训练数据的损失函数值减小，虽说是神经网络的学习正常进行的一个信号，但光看这个结果还不能说明该神经网络在其他数据集上也一定能有同等程度的表现。因此，要评价神经网络的泛化能力，就必须使用不包含在训练数据中的数据。下面的代码在进行学习的过程中，会定期地对训练数据和测试数据记录识别精度。这里，每经过一个 epoch，我们都会记录下训练数据和测试数据的识别精度。
 
 ```python
-# 这是导入数据的操作，需要用到load_mnist(), 这个函数在本书提供的代码中有，我也会放在文章的最后
+# 这是导入数据的操作，需要用到load_mnist(), 这个函数在本书提供的代码中有
+
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
 
 # 超参数的设定
+
 iters_num = 10000  
 train_size = x_train.shape[0]
 batch_size = 100
@@ -536,20 +579,24 @@ train_loss_list = []
 train_acc_list = []
 test_acc_list = []
 # 平均每个epoch的重复次数
+
 iter_per_epoch = max(train_size / batch_size, 1)
 
 network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
 
 for i in range(iters_num):
     # 获取mini-batch
+    
     batch_mask = np.random.choice(train_size, batch_size)
     x_batch = x_train[batch_mask]
     t_batch = t_train[batch_mask]
     
     # 计算梯度
+    
     grad = network.numerical_gradient(x_batch, t_batch)
     
     # 更新参数
+    
     for key in ('W1', 'b1', 'W2', 'b2'):
         network.params[key] -= learning_rate * grad[key]
         
@@ -557,6 +604,7 @@ for i in range(iters_num):
     train_loss_list.append(loss)
     
     # 计算每个epoch的识别精度
+    
     if i % iter_per_epoch == 0:
         train_acc = network.acuracy(x_train, t_train)
         test_acc = network.acuracy(x_test, t_test)
@@ -571,425 +619,7 @@ for i in range(iters_num):
 
 ### 代码汇总
 
-mnist.py文件的代码如下：
-
-```python
-# coding: utf-8
-try:
-    import urllib.request
-except ImportError:
-    raise ImportError('You should use Python 3.x')
-import os.path
-import gzip
-import pickle
-import os
-import numpy as np
-
-
-url_base = 'http://yann.lecun.com/exdb/mnist/'
-key_file = {
-    'train_img':'train-images-idx3-ubyte.gz',
-    'train_label':'train-labels-idx1-ubyte.gz',
-    'test_img':'t10k-images-idx3-ubyte.gz',
-    'test_label':'t10k-labels-idx1-ubyte.gz'
-}
-
-dataset_dir = os.path.dirname(os.path.abspath(__file__))
-save_file = dataset_dir + "/mnist.pkl"
-
-train_num = 60000
-test_num = 10000
-img_dim = (1, 28, 28)
-img_size = 784
-
-
-def _download(file_name):
-    file_path = dataset_dir + "/" + file_name
-
-    if os.path.exists(file_path):
-        return
-
-    print("Downloading " + file_name + " ... ")
-    urllib.request.urlretrieve(url_base + file_name, file_path)
-    print("Done")
-
-def download_mnist():
-    for v in key_file.values():
-       _download(v)
-
-def _load_label(file_name):
-    file_path = dataset_dir + "/" + file_name
-
-    print("Converting " + file_name + " to NumPy Array ...")
-    with gzip.open(file_path, 'rb') as f:
-            labels = np.frombuffer(f.read(), np.uint8, offset=8)
-    print("Done")
-
-    return labels
-
-def _load_img(file_name):
-    file_path = dataset_dir + "/" + file_name
-
-    print("Converting " + file_name + " to NumPy Array ...")
-    with gzip.open(file_path, 'rb') as f:
-            data = np.frombuffer(f.read(), np.uint8, offset=16)
-    data = data.reshape(-1, img_size)
-    print("Done")
-
-    return data
-
-def _convert_numpy():
-    dataset = {}
-    dataset['train_img'] =  _load_img(key_file['train_img'])
-    dataset['train_label'] = _load_label(key_file['train_label'])
-    dataset['test_img'] = _load_img(key_file['test_img'])
-    dataset['test_label'] = _load_label(key_file['test_label'])
-
-    return dataset
-
-def init_mnist():
-    download_mnist()
-    dataset = _convert_numpy()
-    print("Creating pickle file ...")
-    with open(save_file, 'wb') as f:
-        pickle.dump(dataset, f, -1)
-    print("Done!")
-
-def _change_one_hot_label(X):
-    T = np.zeros((X.size, 10))
-    for idx, row in enumerate(T):
-        row[X[idx]] = 1
-
-    return T
-
-
-def load_mnist(normalize=True, flatten=True, one_hot_label=False):
-    """MNISTデータセットの読み込み
-
-    Parameters
-    ----------
-    normalize : 画像のピクセル値を0.0~1.0に正規化する
-    one_hot_label :
-        one_hot_labelがTrueの場合、ラベルはone-hot配列として返す
-        one-hot配列とは、たとえば[0,0,1,0,0,0,0,0,0,0]のような配列
-    flatten : 画像を一次元配列に平にするかどうか
-
-    Returns
-    -------
-    (訓練画像, 訓練ラベル), (テスト画像, テストラベル)
-    """
-    if not os.path.exists(save_file):
-        init_mnist()
-
-    with open(save_file, 'rb') as f:
-        dataset = pickle.load(f)
-
-    if normalize:
-        for key in ('train_img', 'test_img'):
-            dataset[key] = dataset[key].astype(np.float32)
-            dataset[key] /= 255.0
-
-    if one_hot_label:
-        dataset['train_label'] = _change_one_hot_label(dataset['train_label'])
-        dataset['test_label'] = _change_one_hot_label(dataset['test_label'])
-
-    if not flatten:
-         for key in ('train_img', 'test_img'):
-            dataset[key] = dataset[key].reshape(-1, 1, 28, 28)
-
-    return (dataset['train_img'], dataset['train_label']), (dataset['test_img'], dataset['test_label'])
-
-
-if __name__ == '__main__':
-    init_mnist()
-
-```
-
-
-
-```python
-# -*- coding: utf-8 -*-
-import numpy as np
-import matplotlib.pyplot as plt
-from mnist import load_mnist
-
-def sigmoid(x):
-    return 1. / (1 + np.exp(-x))
-
-
-def softmax(x):
-    if x.ndim == 2:  #[batch_size, p]
-        x = x - np.max(x, axis=1, keepdims=True)
-        y = np.exp(x) / np.sum(np.exp(x), axis=1, keepdims=True)
-        return y
-
-    x = x - np.max(x) 
-    return np.exp(x) / np.sum(np.exp(x))
-
-
-
-def mean_square_error(y, t):
-    return 0.5 * np.sum((y - t)**2)
-
-
-def cross_entropy_error(y, t):
-    if y.ndim == 1:
-        t = t.reshape(1, t.size)
-        y = y.reshape(1, y.size)
-        
-    # 将one-hot coding转化成单个coding
-    if t.size == y.size:
-        t = t.argmax(axis=1)
-             
-    batch_size = y.shape[0]
-    return -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size
-
-
-def _numerical_gradient_no_batch(f, x):
-    h = 1e-4  # 0.0001
-    grad = np.zeros_like(x)
-    
-    for idx in range(x.size):
-        tmp_val = x[idx]
-        x[idx] = float(tmp_val) + h
-        fxh1 = f(x)  # f(x+h)
-        
-        x[idx] = tmp_val - h 
-        fxh2 = f(x)  # f(x-h)
-        grad[idx] = (fxh1 - fxh2) / (2*h)
-        
-        x[idx] = tmp_val  # 値を元に戻す
-        
-    return grad
-
-
-def numerical_gradient(f, X):
-    if X.ndim == 1:
-        return _numerical_gradient_no_batch(f, X)
-    else:
-        grad = np.zeros_like(X)
-        
-        for idx, x in enumerate(X):
-            grad[idx] = _numerical_gradient_no_batch(f, x)
-        
-        return grad
-
-
-def func(x):
-    if x.ndim == 1:
-        return np.sum(x**2)
-    else:
-        return np.sum(x**2, axis=1)
-    
-    
-x0 = np.arange(-2, 2.5, 0.25)
-x1 = np.arange(-2, 2.5, 0.25)
-X, Y = np.meshgrid(x0, x1)
-
-X = X.flatten()
-Y = Y.flatten()
-
-grad = numerical_gradient(func, np.array([X, Y]).T).T
-
-plt.figure()
-plt.quiver(X, Y, -grad[0], -grad[1],  angles="xy",color="#666666")
-plt.xlim([-2, 2])
-plt.ylim([-2, 2])
-plt.xlabel('x0')
-plt.ylabel('x1')
-plt.grid()
-plt.draw()
-plt.show()
-
-# ===========================================================================================
-
-
-
-
-class SimpleNet(object):
-    def __init__(self):
-        self.W = np.random.randn(2, 3) # 用高斯分布对权重进行初始化
-        
-    def predict(self, x):    # x: [batch_size, p=2]
-        return np.dot(x, self.W)
-    
-    def loss(self, x, t):
-        z = self.predict(x)
-        y = softmax(z)
-        loss = cross_entropy_error(y, t)
-        
-        return loss
-    
-
-net = SimpleNet()
-print(net.W)
-x = np.array([0.6, 0.9])
-p = net.predict(x)
-print(p)
-
-np.argmax(p)
-
-t = np.array([0, 0, 1])
-net.loss(x, t)
-
-
-def f(W):
-    return net.loss(x, t)
-
-dW = numerical_gradient(f, net.W)
-print(dW)
-
-# ===========================================================================================
-
-
-
-def function_2(x):
-    return x[0]**2 + x[1]**2
-
-
-def gradient_descent(f, init_x, lr=0.01, step_num=100):
-    x = init_x
-    x_history = []
-
-    for i in range(step_num):
-        x_history.append( x.copy() )
-
-        grad = numerical_gradient(f, x)
-        x -= lr * grad
-
-    return x, np.array(x_history)
-
-init_x = np.array([-3.0, 4.0])    
-
-lr = 0.1
-step_num = 20
-x, x_history = gradient_descent(function_2, init_x, lr=lr, step_num=step_num)
-
-x0 = np.arange(-4, 4, 0.25)
-x1 = np.arange(-4, 4, 0.25)
-X0, X1 = np.meshgrid(x0, x1)
-Y = function_2(np.array([X0,X1]))
-
-plt.figure(figsize=(8, 8))
-c = plt.contour(X0, X1, Y, levels=[5, 10, 15], linestyles='--')
-plt.clabel(c, fontsize=10, colors='k', fmt='%.1f')
-# plt.plot( [-5, 5], [0,0], '--b')
-# plt.plot( [0,0], [-5, 5], '--b')
-plt.plot(x_history[:,0], x_history[:,1], 'o')
-
-# plt.xlim(-6, 6)
-# plt.ylim(-6, 6)
-plt.xlabel("X0")
-plt.ylabel("X1")
-plt.show()
-
-# ===========================================================================================
-
-
-
-
-
-
-
-class TwoLayerNet(object):
-    def __init__(self, input_size, hidden_size, output_size, weight_init_std=0.1):
-        # 初始化权重
-        self.params = {}
-        self.params['W1'] = weight_init_std * np.random.randn(input_size, hidden_size)
-        self.params['b1'] = np.zeros(hidden_size)
-        self.params['W2'] = weight_init_std * np.random.randn(hidden_size, output_size)
-        self.params['b2'] = np.zeros(output_size)
-        
-    def predict(self, x):
-        W1, b1, W2, b2 = self.params['W1'], self.params['b1'], self.params['W2'], self.params['b2']
-        
-        a1 = np.dot(x, W1) + b1
-        z1 = sigmoid(a1)
-        a2 = np.dot(z1, W2) + b2
-        y = softmax(a2)
-        
-        return y
-    
-    # x:输入数据，t: label
-    def loss(self, x, t):
-        y = self.predict(x)
-        
-        return cross_entropy_error(y, t)
-    
-    def accuracy(self, x, t):
-        y = self.predict(x)
-        y = np.argmax(y, axis=1)
-        t = np.argmax(t, axis=1)
-        
-        accuracy = np.sum(y == t) / float(x.shape[0])
-        return accuracy
-    
-    def numerical_gradient(self, x, t):
-        loss_W = lambda W: self.loss(x, t)
-        
-        grads = {}
-        grads['W1'] = numerical_gradient(loss_W, self.params['W1'])
-        grads['b1'] = numerical_gradient(loss_W, self.params['b1'])
-        grads['W2'] = numerical_gradient(loss_W, self.params['W2'])
-        grads['b2'] = numerical_gradient(loss_W, self.params['b2'])
-        
-        return grads
-    
-
-
-    
-(x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
-
-# 超参数的设定
-iters_num = 10000  
-train_size = x_train.shape[0]
-batch_size = 100
-learning_rate = 0.1
-
-
-train_loss_list = []
-train_acc_list = []
-test_acc_list = []
-# 平均每个epoch的重复次数
-iter_per_epoch = max(train_size / batch_size, 1)
-
-network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
-
-for i in range(iters_num):
-    # 获取mini-batch
-    batch_mask = np.random.choice(train_size, batch_size)
-    x_batch = x_train[batch_mask]
-    t_batch = t_train[batch_mask]
-    
-    # 计算梯度
-    grad = network.numerical_gradient(x_batch, t_batch)
-    
-    # 更新参数
-    for key in ('W1', 'b1', 'W2', 'b2'):
-        network.params[key] -= learning_rate * grad[key]
-        
-    loss = network.loss(x_batch, t_batch)
-    train_loss_list.append(loss)
-    
-    # 计算每个epoch的识别精度
-    if i % iter_per_epoch == 0:
-        train_acc = network.accuracy(x_train, t_train)
-        test_acc = network.accuracy(x_test, t_test)
-        train_acc_list.append(train_acc)
-        test_acc_list.append(test_acc)
-        print("train acc, test acc | " + str(train_acc) + ", " + str(test_acc))
-        
-
-
-x = np.arange(len(train_acc_list))
-plt.plot(x, train_acc_list, label='train acc')
-plt.plot(x, test_acc_list, label='test acc', linestyle='--')
-plt.xlabel("epochs")
-plt.ylabel("accuracy")
-plt.ylim(0, 1.0)
-plt.legend(loc='lower right')
-plt.show()
-```
+[Deep_Learning_from_scratch_2](https://github.com/leyuanheart/Deep_Learning_From_Scratch/tree/main/2)
 
 ---
 
