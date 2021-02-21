@@ -1,6 +1,16 @@
-# Deep learning from scratch 4
+---
+layout:     post
+title:      Deep learning from scratch 4
+subtitle:   Learning Tricks
+date:       2021-02-18
+author:     Le Yuan
+header-img: img/wolf.jpg
+catalog: true
+tags:
+    - Deep Learning
+---
 
-<img src="figs\封面.jpeg" alt="fengmian" style="zoom:50%;" />
+<img src="https://img.imgdb.cn/item/60311e2d5f4313ce25b859d6.jpg" alt="fengmian" style="zoom:50%;" />
 
 私认为这是这本书让我收获最大的部分。
 
@@ -23,9 +33,13 @@
 ### SGD
 
 回顾一下SGD，用数学式表达：
+
+
 $$
 W \leftarrow W - \eta \frac{\partial L}{\partial W}
 $$
+
+
 我们将SGD实现为一个Python类（为方面后面使用）
 
 ```python
@@ -60,21 +74,25 @@ for i in range(10000):
 ### SGD的缺点
 
 虽然SGD简单，并且容易实现，但是在解决某些问题时可能没有效率。我们考虑求如下函数的最小值的问题。
+
+
 $$
 f(x, y) = \frac{1}{20}x^2+y^2
 $$
-![48](figs\48.png)
+
+
+![48](https://img.imgdb.cn/item/6031c6745f4313ce25eb856e.png)
 
 如上图所示，函数是向x轴方向延伸的“碗”状函数。等高线呈向x轴方向延伸的椭圆状。
 
 接下来看一下它的梯度图。从下图可以看出，梯度在y轴方向上大，x轴方向上小。这里需要注意的是，虽然函数的最小值在$(x,y)=(0,0)$处，但是图中很多梯度的方向并没有指向$(0,0)$。
 
-![49](figs\49.png)
+![49](https://img.imgdb.cn/item/6031c6745f4313ce25eb8570.png)
 
 我们来尝试该函数应用SGD。从$(x,y) = (-7.0, 2.0)$处（初始值）开始搜索，结果如下图所示。 
 在图中，SGD呈“之”字形移动。这是一个相当低效的路径。也就是说，SGD的缺点是，如果函数的形状非均向(anisotropic)，比如呈延伸状，搜索的路径就会非常低效。因此，我们需要比单纯朝梯度方向前进的SGD更聪明的方法。**SGD低效的根本原因是，梯度的方向并没有指向最小值的方向**。 为了改正SGD的缺点，下面我们将介绍Momentum、 AdaGrad和Adam这3种方法来取代SGD。
 
-![image-20210217113302786](C:\Users\leyuan\Desktop\Deep-Learning-From-Scratch-Blogs\figs\50.png)
+![50](https://img.imgdb.cn/item/6031c6745f4313ce25eb8573.png)
 
 ```python
 import numpy as np
@@ -94,16 +112,19 @@ Z = func(X, Y)
 
 
 # 等高线图
+
 plt.figure()
 c = plt.contour(X, Y, Z, levels=50)
 
 # 三维图
+
 fig = plt.figure()
 axe = plt.axes(projection='3d')
 axe.contour3D(X, Y, Z, levels=100)
 
 
 # 梯度图
+
 grads = g_f(X.flatten(), Y.flatten())
 plt.figure()
 plt.quiver(X.flatten(), Y.flatten(), -grads[0], -grads[1],  angles="uv",color="#666666")
@@ -111,6 +132,7 @@ plt.quiver(X.flatten(), Y.flatten(), -grads[0], -grads[1],  angles="uv",color="#
 
 
 # 训练
+
 init_pos = (-7.0, 2.0)
 params = {}
 params['x'], params['y'] = init_pos[0], init_pos[1]
@@ -137,7 +159,8 @@ y = np.arange(-5, 5, 0.01)
 X, Y = np.meshgrid(x, y) 
 Z = func(X, Y)
 
-# for simple contour line  
+# for simple contour line 
+
 mask = Z > 7
 Z[mask] = 0
 
@@ -155,15 +178,19 @@ plt.show()
 ### Momentum
 
 Momentum是“动量”的意思，和物理有关。用数学式表示Momentum方法为：
+
+
 $$
 \begin{align}
 v \leftarrow \alpha v + \eta \frac{\partial L}{\partial W} \\
 W \leftarrow W - v
 \end{align}
 $$
+
+
 和前面的SGD一样，W表示要更新的权重参数，$\frac{\partial L}{\partial W}$表示损失函数关于W的梯度， $\eta$表示学习率。这里新出现了一个变量$v$。对应物理上的速度。第一个式子表示了物体在梯度方向上受力，在这个力的作用下，物体的速度增加这一物理法则。如下图所示， Momentum方法给人的感觉就像是小球在地面上滚动。 
 
-![51](figs\51.png)
+![51](https://img.imgdb.cn/item/6031caf55f4313ce25ed1e50.png)
 
 $\alpha v$这一项。在物体不受任何力时，该项承担使物体逐渐减速的任务 (a设定为0.9之类的值），对应物理上的地面摩擦或空气阻力。
 
@@ -187,7 +214,7 @@ class Momentum:
 
 现在尝试使用Momentum解决之前的最优化问题，只需要把optimizer换成Momentum就行了，结果如下图。 
 
-![52](figs\52.png)
+![52](https://img.imgdb.cn/item/6031caf55f4313ce25ed1e55.png)
 
 图中，更新路径就像小球在碗中滚动一样。和SGD相比，我们发现“之”字形 的“程度”减轻了。这是因为虽然x轴方向上受到的力非常小，但是一直在同一方向上受力，所以朝同一个方向会有一定的加速。反过来，虽然y轴方向上受到的力很大，但是因 为交互地受到正方向和反方向的力，它们会互相抵消，所以y轴方向上的速度不稳定。因此，和SGD时的情形相比，可以更快地朝x轴方向靠近，减弱“之”字形的变动程度。 
 
@@ -200,12 +227,15 @@ class Momentum:
 逐渐减小学习率的想法，相当于将“全体”参数的学习率值一起降低。而AdaGrad进一步发展了这个想法，针对“一个一个”的参数，赋予其“定制”的值。 
 
 AdaGrad会为参数的每个元素适当地调整学习率，与此同时进行学习（AdaGrad的 Ada来自英文单词Adaptive，即“适当的”的意思）。下面，让我们用数学式表示AdaGrad 的更新方法。 
+
+
 $$
 \begin{align}
 h \leftarrow h + \frac{\partial L}{\partial W} \odot \frac{\partial L}{\partial W} \\
 W \leftarrow W - \eta \frac{1}{\sqrt{h}}\frac{\partial L}{\partial W}
 \end{align}
 $$
+
 
 
 这里新出现了变量h，它保存了以前的所有梯度值的平方和（$\odot$表示对应矩阵元素的乘法(element-wise)）。然后，在更新参数时，通过乘以$\frac{1}{\sqrt{h}}$ ，就可以调整学习的尺度。这意味着，参数的元素中变动较大（被大幅更新）的元素的学习率将变小。也就是说，可以按参数的元素进行学习率衰减，使变动大的参数的学习率逐 渐减小。 
@@ -231,9 +261,9 @@ class AdaGrad:
             params[key] -= self.lr * grads[key] / np.sqrt(self.h[key] + 1e-7)
 ```
 
-这里需要注意的是，最后一行加上了微小值1e-7。这是为了防止当self.h[key] 中 有0 时，将0用作除数的情况。在很多深度学习的框架中，这个微小值也可以设定为参数，但这里我们用的是1e-7这个固定值。 
+这里需要注意的是，最后一行加上了微小值1e-7。这是为了防止当self.h[key] 中有0 时，将0用作除数的情况。在很多深度学习的框架中，这个微小值也可以设定为参数，但这里我们用的是1e-7这个固定值。 
 
-![53](figs\53.png)
+![53](https://img.imgdb.cn/item/6031caf55f4313ce25ed1e5b.png)
 
 函数的取值高效地向着最小值移动。由于y轴方向上的梯度较大，因此刚开始变动较大，但是后面会根据这个较大变动按比例进行调整，减小更新的步伐。因此，y轴方向的更新程度被减弱，“之”字形的变动程度有所衰减。 
 
@@ -269,21 +299,16 @@ class Adam:
         lr_t  = self.lr * np.sqrt(1.0 - self.beta2**self.iter) / (1.0 - self.beta1**self.iter)         
         
         for key in params.keys():
-            #self.m[key] = self.beta1*self.m[key] + (1-self.beta1)*grads[key]
-            #self.v[key] = self.beta2*self.v[key] + (1-self.beta2)*(grads[key]**2)
+            
             self.m[key] += (1 - self.beta1) * (grads[key] - self.m[key])
             self.v[key] += (1 - self.beta2) * (grads[key]**2 - self.v[key])
             
             params[key] -= lr_t * self.m[key] / (np.sqrt(self.v[key]) + 1e-7)
-            
-            #unbias_m += (1 - self.beta1) * (grads[key] - self.m[key]) # correct bias
-            #unbisa_b += (1 - self.beta2) * (grads[key]*grads[key] - self.v[key]) # correct bias
-            #params[key] += self.lr * unbias_m / (np.sqrt(unbisa_b) + 1e-7)
 ```
 
 >  Adam会设置3个超参数。一个是学习率（论文中以$\alpha$出现），另外两个是一次momentum系数$\beta_1$和二次momentum系数$\beta_2$。根据论文，标准的设定值是0.9和0.999。设置了这些值后，大多数情况下都能顺利运行。 
 
-![54](figs\54.png)
+![54](https://img.imgdb.cn/item/6031caf55f4313ce25ed1e61.png)
 
 在图中，基于Adam的更新过程就像小球在碗中滚动一样。虽然Momentun也有类似的移动，但是相比之下，Adam的小球左右摇晃的程度有所减轻。这得益于学习的更新程度被适当地调整了。 
 
@@ -318,8 +343,11 @@ def sigmoid(x):
     return 1 / (1 + np.exp(-x))
     
 input_data = np.random.randn(1000, 100)  # 1000个数据
+
 node_num = 100  # 各隐藏层的节点（神经元）数
+
 hidden_layer_size = 5  # 隐藏层有5层
+
 activations = {}  # 激活值的结果保存在这里
 
 x = input_data
@@ -329,9 +357,12 @@ for i in range(hidden_layer_size):
         x = activations[i-1]
 
     # 权重初始化
+    
     w = np.random.randn(node_num, node_num) * 1
     # w = np.random.randn(node_num, node_num) * 0.01
+    
     # w = np.random.randn(node_num, node_num) * np.sqrt(1.0 / node_num)
+    
     # w = np.random.randn(node_num, node_num) * np.sqrt(2.0 / node_num)
 
 
@@ -343,25 +374,28 @@ for i in range(hidden_layer_size):
     activations[i] = a
 
 # 可视化
+
 for i, a in activations.items():
     plt.subplot(1, len(activations), i+1)
     plt.title(str(i+1) + "-layer")
     if i != 0: plt.yticks([], [])
     # plt.xlim(0.1, 1)
+    
     # plt.ylim(0, 7000)
+    
     plt.hist(a.flatten(), 30, range=(0,1))
 plt.show()
 ```
 
 这里假设神经网络有5层，每层有100个神经元。然后，用高斯分布随机生成1000 个数据作为输入数据，并把它们传给5层神经网络。激活函数使用sigmoid函数，各层的 激活的结果保存在activations变量中。这个代码段中需要注意的是权重的尺度。虽然这次我们使用的是标准差为1的高斯分布，但实验的目的是通过改变这个尺度（标准差），观察激活值的分布如何变化。现在，我们将保存在activations中的各层数据画成直方图。 
 
-![56](figs\56.png)
+![56](https://img.imgdb.cn/item/6031cbaf5f4313ce25ed59be.png)
 
 从图可知，各层的激活值呈偏向0和1的分布。这里使用的sigmoid函数是S 型函数，随着输出不断地靠近0（或者靠近1)，它的导数的值逐渐接近0。因此，偏向0 和1的数据分布会造成反向传播中梯度的值不断变小，最后消失。这个问题称为**梯度消失**（gradient vanishing)。层次加深的深度学习中，梯度消失的问题可能会更加严重。 
 
 下面，将权重的标准差设为0.01，进行相同的实验。实验代码只需要把设定权重初始值的地方相应的替换就行了。
 
-![57](figs\57.png)
+![57](https://img.imgdb.cn/item/6031cbaf5f4313ce25ed59c3.png)
 
 这次呈集中在0.5附近的分布。因为不像刚才的例子那样偏向0和1，所以不会发生梯度消失的问题。但是，激活值的分布有所偏向，说明在表现力上会有很大问题。为什么这么说呢？因为如果有多个神经元都输出几乎相同的值，那它们就没有存在的意义了。比如，如果100个神经元都输出几乎相同的值，那么也可以由1个神经元来表达基本相同的事情。因此，激活值在分布上有所偏向会出现“表现力受限”的问题。 
 
@@ -372,11 +406,11 @@ Xavier的论文中，为了使各层的激活值呈现出具有相同广度的�
 
 > Xavier的论文中提出的设定值，不仅考虑了前一层的输入节点数量，还考虑了下一层的输出节点数量。但是， Caffe等框架的实现中进行了简化，只使用了这里所说的前一层的输入节点进行计算。  
 
-![58](figs\58.png)
+![58](https://img.imgdb.cn/item/6031cbb05f4313ce25ed59c9.png)
 
 使用Xavier初始值后，前一层的节点数越多，要设定为目标节点的初始值的权重尺度就越小。代码同样只需要改动初始化的地方。
 
-![59](figs\59.png)
+![59](https://img.imgdb.cn/item/6031cbb05f4313ce25ed59d1.png)
 
 使用Xavier初始值后的结果如图所示。从这个结果可知，越是后面的层，图像变得越歪斜，但是呈现了比之前更有广度的分布。因为各层间传递的数据有适当的广度， 所以sigmoid函数的表现力不受限制，有望进行高效的学习。 
 
@@ -388,7 +422,7 @@ Xavier初始值是以激活函数是线性函数为前提而推导出来的。�
 
 现在来看一下激活函数使用ReLU时激活值的分布。我们给出了3个实验的结果，依次是权重初始值为标准差是0.01的高斯分布（下文简写为“std = 0.01"）时、初始值为Xavier初始值时、初始值为ReLU专用的“He初始值”时的结果。 
 
-![60](figs\60.png)
+![60](https://img.imgdb.cn/item/6031cbb05f4313ce25ed59da.png)
 
 观察实验结果可知，当“std=0.01”时，各层的激活值非常小。神经网络传递的是非常小的值。说明反向传播时权重的梯度也很小，这是很严重的问题，实际上学习基本上没什么进展。
 
@@ -414,7 +448,7 @@ Xavier初始值是以激活函数是线性函数为前提而推导出来的。�
 
 如前所述，Batch Norm的思路是调整各层的激活值分布使其拥有适当的广度。为 此，要向神经网络中插入对数据分布进行正规化的层，即Batch Normalization层（下文简 称Batch Norm层），如图。 
 
-![61](figs\61.png)
+![61](https://img.imgdb.cn/item/6031cbe25f4313ce25ed6cbc.png)
 
 Batch Norm，顾名思义，以进行学习时的mini-batch为单位，按mini-batch进行正规化。具体而言，就是进行使数据分布的均值为0、方差为1的正规化。用数学式表示的话，如下所示。 
 $$
@@ -432,9 +466,9 @@ y_i \leftarrow \gamma \hat{x}_i + \beta
 $$
 这里$\gamma$和$\beta$是参数。一开始$\gamma=1, \beta=0$，然后再通过学习调整到合适的值（也就是说这两个参数也要加入神经网络的参数中一起训练）。
 
-![62](figs\62.png)
+![62](https://img.imgdb.cn/item/6031cbe25f4313ce25ed6cc8.png)
 
-Batch Norm的反向传播的推导有些复杂，这里我们不进行介绍。不过如果使用上面的计算图来思考的话，Batch Norm的反向传播或许也能比较轻松地推导出来。Frederik Kratzert的博客[Understanding the backward pass through Batch Normalization Layer]()里有 详细说明，感兴趣的读者可以参考一下（留个坑，之后补上）。 
+Batch Norm的反向传播的推导有些复杂，这里我们不进行介绍。不过如果使用上面的计算图来思考的话，Batch Norm的反向传播或许也能比较轻松地推导出来。Frederik Kratzert的博客[Understanding the backward pass through Batch Normalization Layer](https://kratzert.github.io/2016/02/12/understanding-the-gradient-flow-through-the-batch-normalization-layer.html)里有详细说明，感兴趣的读者可以参考一下（留个坑，之后补上）。 
 
 ```python
 class BatchNormalization:
@@ -445,10 +479,12 @@ class BatchNormalization:
         self.input_shape = None # 卷积层4维，全连接层2维
         
         # 评估阶段使用的作为数据标准化的均值和方差
+        
         self.running_mean = running_mean
         self.running_var = running_var
         
         # backward时使用的中间变量
+        
         self.batch_size = None
         self.xc = None
         self.std = None
@@ -519,7 +555,7 @@ class BatchNormalization:
 
 用MNIST数据集，观察使用Batch Norm层和不用时的区别。下图是权重初始化时不同的尺度参数的结果，实线是使用了Batch Norm，虚线是没有使用。
 
-![63](figs\63.png)
+![63](https://img.imgdb.cn/item/6031cbe25f4313ce25ed6cd5.png)
 
 几乎所有的情况下都是使用Batch Norm时学习进行得更快。同时也发现，实际上，在不使用Batch Norm的情况下，如果不赋予一个尺度好的初始值， 将完全无法进行。 
 
@@ -545,7 +581,7 @@ class BatchNormalization:
 
 下图是比较使用和不是权值衰减的MNIST的训练结果。
 
-![64](figs\64.png)
+![64](https://img.imgdb.cn/item/6031cbe25f4313ce25ed6cdd.png)
 
 如图所示，虽然练数据的识别精度和测试数据的识别精度之间有差距，但是与没有使用权值衰减的结果相比，差距变小了。这说明过拟合受到了抑制。此外，还要注意，训练数据的识别精度没有达到100%。
 
@@ -554,7 +590,7 @@ class BatchNormalization:
 作为抑制过拟合的方法，前面我们介绍了为损失函数加上权重的L2范数的权值衰减方法。该方法可以简单地实现，在某种程度上能够抑制过拟合。但是，如果网络的模型变得很复杂，只用权值衰减就难以应对了。在这种情况下，我们经常会使用Dropout方法。 
 Dropout是一种在学习的过程中随机删除神经元的方法。训练时，随机选出隐藏层的神经元，然后将其删除。被删除的神经元不再进行信号的传递。训练时，每传递一次数据，就会随机选择要删除的神经元。然后，测试时，虽然会传递所有的 神经元信号，但是对于各个神经元的输出，要乘上训练时的删除比例后再输出。 
 
-![65](figs\65.png)
+![65](https://img.imgdb.cn/item/6031cbe25f4313ce25ed6ce3.png)
 
 ```python
 class Dropout:
@@ -577,7 +613,7 @@ class Dropout:
 
 Dropout的实验和前面的实验一样，使用7层网络（每层有100个神经元，激活函数 为ReLU)，左边不使用Dropout，右边使用Dropout，实验的结果如图所示。 
 
-![66](figs\66.png)
+![66](https://img.imgdb.cn/item/6031cc235f4313ce25ed82c8.png)
 
 图中，通过使用Dropout，训练数据和测试数据的识别精度的差距变小了。并且训练数据也没有到达100％的识别精度。像这样，通过使用Dropout，即便是表现力强的网络，也可以抑制过拟合。 
 
@@ -605,9 +641,13 @@ Dropout的实验和前面的实验一样，使用7层网络（每层有100个神
 
 在超参数的最优化中，要注意的是深度学习需要很长时间（比如，几天或几周）。因此，在超参数的搜索中，需要尽早放弃那些不符合逻辑的超参数。于是，在超参数的最优化中，**减少学习的epoch，缩短一次评估所需的时间是一个不错的办法**。 
 
-## 代码说明
+## 代码汇总
 
-这一篇的代码有些多，尤其是涉及到MNIST训练结果的那些代码我都没有放在正文里，我之后会整理一个代码库，对应每一篇的代码，全部是self-explained。
+[Deep_Learning_from_scratch_4](https://github.com/leyuanheart/Deep_Learning_From_Scratch/tree/main/4)
+
+## 补坑：Batch Normalization 反向传播
+
+![89](https://img.imgdb.cn/item/6031d6ea5f4313ce25f16dfe.png)
 
 ---
 
