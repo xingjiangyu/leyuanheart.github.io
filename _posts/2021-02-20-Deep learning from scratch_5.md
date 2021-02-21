@@ -285,11 +285,12 @@ def col2im(col, input_shape, filter_h, filter_w, stride=1, pad=0):
             img[:, :, y:y_max:stride, x:x_max:stride] += col[:, :, y, x, :, :]
     
     '''
-     和img2col同样的，我也没能理解上面的逻辑，还是按自己的逻辑写了一个 '''
+    和img2col同样的，我也没能理解上面的逻辑，还是按自己的逻辑写了一个 '''
     '''
     img = np.zeros((N, C, stride * (out_h - 1) + filter_h + 1, stride * (out_w - 1) + filter_w + 1))'''
     
     # +1是为了防止出现正向传播时没法整除的情况。不过如果出现了不整除的情况，就已经无法再还原成原来一模一样了，可以自己试试
+    
     '''
     for y in range(out_h):'''
         '''
