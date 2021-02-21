@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Deep learning from scratch 3
-subtitle:   Error Back-Propagation Method
+subtitle:   Error Backward-Propagation Method
 date:       2021-02-16
 author:     Le Yuan
 header-img: img/wolf.jpg
